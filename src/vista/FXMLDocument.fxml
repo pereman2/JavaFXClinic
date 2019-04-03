@@ -15,10 +15,10 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="558.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.FXMLDocumentController">
    <center>
-      <TableView prefHeight="459.0" prefWidth="508.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tabla" prefHeight="459.0" prefWidth="508.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="299.0" text="C1" />
-          <TableColumn prefWidth="300.0" text="C2" />
+          <TableColumn fx:id="col_nombre" prefWidth="259.0" text="Nombre" />
+          <TableColumn fx:id="col_apellidos" prefWidth="340.0" text="Apellidos" />
         </columns>
       </TableView>
    </center>
