@@ -89,7 +89,7 @@
                   <Image url="@../images/add_ico.png" />
                </image>
             </ImageView>
-            <ImageView id="img" fx:id="img_filtrar" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_filtrar" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#visualizar" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>

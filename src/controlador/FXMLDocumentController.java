@@ -23,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -37,9 +38,9 @@ import model.*;
  * @author pereman2
  */
 public class FXMLDocumentController implements Initializable {
-    private int DOCTOR = 1;
-    private int PATIENT = 2;
-    private int APPOINTMENT = 3;
+    private final int DOCTOR = 1;
+    private final int PATIENT = 2;
+    private final int APPOINTMENT = 3;
     
     private int actual;
     
@@ -147,7 +148,7 @@ public class FXMLDocumentController implements Initializable {
                 Scene scene = new Scene(root);
                 stage.setTitle("Añadir paciente");
                 stage.setScene(scene);
-                stage.show();
+                stage.showAndWait();
                 break;
             case 3:
                 break;
@@ -175,18 +176,30 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void eliminar(MouseEvent event) {
         switch(actual){
-            case 1:
+            case DOCTOR:
                 
                 break;
-            case 2:
+            case PATIENT:
                 Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
-                database.hasAppointments(aux);
+                if (database.hasAppointments(aux)) {
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                    alerta.setTitle("Cita encontrada");
+                    alerta.setHeaderText("El cliente ya tiene una cita");
+                    alerta.setContentText("Imposible eliminar paciente con una cita asignada");
+                    alerta.showAndWait();
+                    break;
+                }
+
                 database.getPatients().remove(aux);
                 datos_pat.remove(aux);
                 break;
-            case 3:
+            case APPOINTMENT:
                 break;
         }
+    }
+
+    @FXML
+    private void visualizar(MouseEvent event) {
     }
     
 }
