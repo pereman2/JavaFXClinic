@@ -12,7 +12,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import model.Patient;
 
 /**
  * FXML Controller class
@@ -44,7 +46,13 @@ public class VentanaAñadirController implements Initializable {
 
     @FXML
     private void aceptar(ActionEvent event) {
-        
+        String name = field_nombre.getText();
+        String surname = field_apellidos.getText();
+        String identifier = field_dni.getText();
+        String telephon = field_telefono.getText();
+        Image photo = img.getImage();
+        Patient aux = new Patient(identifier, name, surname, telephon, photo);
+        FXMLDocumentController.addPatient(aux);
     }
 
     @FXML

@@ -30,10 +30,10 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button bot_añadir;
     private ClinicDBAccess database;
-    private ArrayList<Doctor> doctores;
-    private ArrayList<Patient> pacientes;
-    private ObservableList<Patient> datos_pat = null;
-    private ObservableList<Doctor> datos_doc = null;
+    private static ArrayList<Doctor> doctores;
+    public static ArrayList<Patient> pacientes;
+    private static ObservableList<Patient> datos_pat = null;
+    private static ObservableList<Doctor> datos_doc = null;
     @FXML
     private TableView<Person> tabla;
     @FXML
@@ -64,6 +64,12 @@ public class FXMLDocumentController implements Initializable {
         //tabla.setItems(datos_doc);
         col_nombre.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getName()));
         col_apellidos.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+    }
+    public static ArrayList<Patient> getPatients(){
+        return pacientes;
+    }
+    public static void addPatient(Patient pat) {
+        pacientes.add(pat);
     }
     
 }
