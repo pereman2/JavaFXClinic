@@ -12,7 +12,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
+import DBAccess.ClinicDBAccess;
+import java.util.ArrayList;
+import model.*;
 /**
  *
  * @author pereman2
@@ -22,11 +24,13 @@ public class FXMLDocumentController implements Initializable {
     private Label label;
     @FXML
     private Button bot_añadir;
-    
+    private ClinicDBAccess database;
+    private ArrayList<Patient> pacientes;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        database = ClinicDBAccess.getSingletonClinicDBAccess();
+        
     }    
     
 }
