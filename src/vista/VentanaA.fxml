@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="412.0" prefWidth="717.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.VentanaAñadirController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="376.0" prefWidth="717.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.VentanaAñadirController">
    <children>
       <HBox alignment="CENTER" layoutX="11.0" layoutY="10.0" prefHeight="196.0" prefWidth="706.0">
          <children>
@@ -23,7 +23,7 @@
                         <Image url="@../images/default.png" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="hyperlink_img" text="Añadir imagen" />
+                  <Hyperlink fx:id="hyperlink_img" onAction="#cambiarImagen" text="Añadir imagen" />
                </children>
             </VBox>
          </children>
@@ -82,7 +82,7 @@
             <TextField fx:id="field_telefono" onKeyReleased="#colorFondoCaracter" />
          </children>
       </VBox>
-      <HBox alignment="BOTTOM_RIGHT" layoutX="517.0" layoutY="312.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+      <HBox alignment="BOTTOM_RIGHT" layoutX="490.0" layoutY="319.0" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" onAction="#aceptar" text="Aceptar">
                <HBox.margin>

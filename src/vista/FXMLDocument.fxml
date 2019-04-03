@@ -25,17 +25,17 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField prefHeight="26.0" prefWidth="356.0">
+            <TextField fx:id="texto_filtro" prefHeight="26.0" prefWidth="356.0">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
             </TextField>
-            <ComboBox prefWidth="150.0">
+            <ComboBox fx:id="cb_tipoFiltro" prefWidth="150.0">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
             </ComboBox>
-            <Button mnemonicParsing="false" text="Filtrar" />
+            <Button fx:id="btn_filtrar" mnemonicParsing="false" text="Filtrar" />
          </children>
       </HBox>
    </bottom>
@@ -45,7 +45,7 @@
             <Insets />
          </BorderPane.margin>
          <children>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_medico" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -53,7 +53,7 @@
                   <Image url="@../images/doctor_ico.png" />
                </image>
             </ImageView>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_paciente" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -61,7 +61,7 @@
                   <Image url="@../images/paciente_ico.png" />
                </image>
             </ImageView>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_citas" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -70,7 +70,7 @@
                </image>
             </ImageView>
             <Separator prefWidth="200.0" />
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_nuevo" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#añadirNuevo" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -78,7 +78,7 @@
                   <Image url="@../images/add_ico.png" />
                </image>
             </ImageView>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_filtrar" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -86,7 +86,7 @@
                   <Image url="@../images/buscar_ico.png" />
                </image>
             </ImageView>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_eliminar" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>

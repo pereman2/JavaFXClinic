@@ -5,6 +5,7 @@
  */
 package controlador;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -12,8 +13,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * FXML Controller class
@@ -60,6 +64,20 @@ public class VentanaAñadirController implements Initializable {
     }
     
     @FXML
+    private void cambiarImagen(ActionEvent event) {
+        JFileChooser exploradorJPG = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter(
+            "JPG & PNG Images","jpg", "png");
+        exploradorJPG.setFileFilter(filtro);
+        exploradorJPG.setVisible(true);
+        if (exploradorJPG.getSelectedFile() != null) {
+            File imagen = exploradorJPG.getSelectedFile();            
+            img.setImage(new Image(imagen.getAbsolutePath()));
+        }
+        hyperlink_img.setText("Cambiar imagen");
+    }
+    
+    @FXML
     //Cambia el color del fondo cuando se escribe un
     //caracter incorrecto
     private void colorFondoCaracter(KeyEvent event) {        
@@ -79,6 +97,9 @@ public class VentanaAñadirController implements Initializable {
         if (!aux) {
             id.setStyle(redBackground);
         }
+        else {
+            id.setStyle(null);
+        }
     }
     
     
@@ -97,6 +118,8 @@ public class VentanaAñadirController implements Initializable {
         }
         return res;
     }
+
+    
 
     
     
