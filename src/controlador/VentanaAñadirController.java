@@ -18,8 +18,8 @@ import javafx.scene.image.ImageView;
  *
  * @author pereman2
  */
-public class VentanaAñadirController implements Initializable {
-
+public class VentanaAñadirController implements Initializable {    
+    
     @FXML
     private ImageView img;
     @FXML
