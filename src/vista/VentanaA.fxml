@@ -47,12 +47,12 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="139.0" layoutY="172.0" prefHeight="150.0" prefWidth="184.0">
          <children>
-            <TextField fx:id="field_nombre" prefHeight="26.0" prefWidth="161.0">
+            <TextField fx:id="field_nombre" onKeyReleased="#colorFondoCaracter" prefHeight="26.0" prefWidth="161.0">
                <VBox.margin>
                   <Insets bottom="25.0" />
                </VBox.margin>
             </TextField>
-            <TextField fx:id="field_dni" />
+            <TextField fx:id="field_dni" onKeyReleased="#colorFondoCaracter" />
          </children>
       </VBox>
       <VBox alignment="CENTER_RIGHT" layoutX="323.0" layoutY="172.0" prefHeight="150.0" prefWidth="135.0">
@@ -74,12 +74,12 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="468.0" layoutY="172.0" prefHeight="150.0" prefWidth="184.0">
          <children>
-            <TextField fx:id="field_apellidos">
+            <TextField fx:id="field_apellidos" onKeyReleased="#colorFondoCaracter">
                <VBox.margin>
                   <Insets bottom="25.0" />
                </VBox.margin>
             </TextField>
-            <TextField fx:id="field_telefono" />
+            <TextField fx:id="field_telefono" onKeyReleased="#colorFondoCaracter" />
          </children>
       </VBox>
       <HBox alignment="BOTTOM_RIGHT" layoutX="517.0" layoutY="312.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
