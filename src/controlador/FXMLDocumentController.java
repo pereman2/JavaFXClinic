@@ -23,8 +23,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -59,6 +62,16 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Doctor, String> col_nombre_doctor;
     @FXML
     private TableColumn<Doctor, String> col_apellidos_doctor;
+    @FXML
+    private ImageView img_filtrar;
+    @FXML
+    private ImageView img_eliminar;
+    @FXML
+    private TextField texto_filtro;
+    @FXML
+    private ComboBox<?> cb_tipoFiltro;
+    @FXML
+    private Button btn_filtrar;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -141,7 +154,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    @FXML
     private void añadirNuevo(MouseEvent event) {
         FXMLLoader ventanaAñadir = new FXMLLoader (
                         getClass().getResource("/vista/VentanaA.fxml"));
@@ -158,6 +170,23 @@ public class FXMLDocumentController implements Initializable {
     }
     public static ClinicDBAccess getClinicDBAccess(){
         return database;
+    }
+
+    @FXML
+    private void eliminar(MouseEvent event) {
+        switch(actual){
+            case 1:
+                
+                break;
+            case 2:
+                Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
+                database.hasAppointments(aux);
+                database.getPatients().remove(aux);
+                datos_pat.remove(aux);
+                break;
+            case 3:
+                break;
+        }
     }
     
 }

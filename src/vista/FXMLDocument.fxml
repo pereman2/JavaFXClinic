@@ -97,7 +97,7 @@
                   <Image url="@../images/buscar_ico.png" />
                </image>
             </ImageView>
-            <ImageView id="img" fx:id="img_eliminar" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
+            <ImageView id="img" fx:id="img_eliminar" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#eliminar" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
