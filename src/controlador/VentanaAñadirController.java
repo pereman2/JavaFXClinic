@@ -5,9 +5,12 @@
  */
 package controlador;
 
+import DBAccess.ClinicDBAccess;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Patient;
@@ -31,6 +35,8 @@ public class VentanaAñadirController implements Initializable {
     public static final int NOMBRE_APELLIDOS = 1;
     public static final int TELEFONO = 2;
     
+    ObservableList<Patient> pacientes_local;
+            
     private String redBackground = "-fx-background-color: red;";
     
     @FXML
@@ -45,14 +51,14 @@ public class VentanaAñadirController implements Initializable {
     private TextField field_apellidos;
     @FXML
     private TextField field_telefono;
-    
+    ClinicDBAccess db;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+         db = ClinicDBAccess.getSingletonClinicDBAccess();
     }    
 
     @FXML
@@ -63,7 +69,9 @@ public class VentanaAñadirController implements Initializable {
         String telephon = field_telefono.getText();
         Image photo = img.getImage();
         Patient aux = new Patient(identifier, name, surname, telephon, photo);
-        FXMLDocumentController.addPatient(aux);
+        FXMLDocumentController.getClinicDBAccess().getPatients().add(aux);
+        pacientes_local.add(aux);
+        ((Stage) img.getScene().getWindow()).close();
     }
 
     @FXML
@@ -125,7 +133,9 @@ public class VentanaAñadirController implements Initializable {
         }
         return res;
     }
-
+    public void initListaPersona(ObservableList<Patient> pat) {
+        pacientes_local = pat;
+    }
     
 
     

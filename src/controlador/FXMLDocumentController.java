@@ -41,7 +41,7 @@ public class FXMLDocumentController implements Initializable {
     private int actual;
     
     private Label label;
-    private ClinicDBAccess database;
+    private static ClinicDBAccess database;
     //arraylist de doctores,pacientes
     private static ArrayList<Doctor> doctores;
     public static ArrayList<Patient> pacientes;
@@ -78,6 +78,8 @@ public class FXMLDocumentController implements Initializable {
         initPatients();
         
         actual = 0;
+        
+        
     }   
     //inicializa tabla pacientes
     private void initPatients(){
@@ -95,7 +97,7 @@ public class FXMLDocumentController implements Initializable {
     public static ArrayList<Patient> getPatients(){
         return pacientes;
     }
-    public static void addPatient(Patient pat) {
+    public void addPatient(Patient pat) {
         pacientes.add(pat);
     }
 
@@ -128,6 +130,7 @@ public class FXMLDocumentController implements Initializable {
                 Stage stage = new Stage();
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaA.fxml"));
                 Parent root = miLoader.load();
+                ((VentanaAñadirController)miLoader.getController()).initListaPersona(datos_pat);
                 Scene scene = new Scene(root);
                 stage.setTitle("Añadir paciente");
                 stage.setScene(scene);
@@ -152,6 +155,9 @@ public class FXMLDocumentController implements Initializable {
         catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    public static ClinicDBAccess getClinicDBAccess(){
+        return database;
     }
     
 }

@@ -5,11 +5,15 @@
  */
 package javafxclinic;
 
+import DBAccess.ClinicDBAccess;
+import controlador.FXMLDocumentController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -25,6 +29,14 @@ public class JavaFXClinic extends Application {
         
         stage.setScene(scene);
         stage.show();
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+          public void handle(WindowEvent we) {
+              System.out.println("Stage is closing");
+              FXMLDocumentController.getClinicDBAccess().saveDB();
+              
+          }
+      });   
     }
 
     /**
