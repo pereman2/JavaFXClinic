@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="332.0" prefWidth="717.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.VentanaAñadirController">
+   <children>
+      <HBox alignment="CENTER" layoutX="11.0" layoutY="10.0" prefHeight="196.0" prefWidth="706.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="215.0" prefWidth="257.0">
+               <children>
+                  <ImageView fx:id="img" fitHeight="127.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/default.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink fx:id="hyperlink_img" text="Añadir imagen" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <VBox alignment="CENTER_RIGHT" layoutX="8.0" layoutY="172.0" prefHeight="150.0" prefWidth="110.0">
+         <children>
+            <Label text="Nombre" textAlignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="DNI" textAlignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="139.0" layoutY="172.0" prefHeight="150.0" prefWidth="184.0">
+         <children>
+            <TextField fx:id="field_nombre" prefHeight="26.0" prefWidth="161.0">
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="field_dni" />
+         </children>
+      </VBox>
+      <VBox alignment="CENTER_RIGHT" layoutX="323.0" layoutY="172.0" prefHeight="150.0" prefWidth="135.0">
+         <children>
+            <Label text="Apellidos" textAlignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Telefono" textAlignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="468.0" layoutY="172.0" prefHeight="150.0" prefWidth="184.0">
+         <children>
+            <TextField fx:id="field_apellidos">
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </TextField>
+            <TextField fx:id="field_telefono" />
+         </children>
+      </VBox>
+   </children>
+</Pane>
