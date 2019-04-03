@@ -32,23 +32,38 @@ public class FXMLDocumentController implements Initializable {
     private ClinicDBAccess database;
     private ArrayList<Doctor> doctores;
     private ArrayList<Patient> pacientes;
-    private ObservableList<Patient> datos = null;
+    private ObservableList<Patient> datos_pat = null;
+    private ObservableList<Doctor> datos_doc = null;
     @FXML
-    private TableView<Patient> tabla;
+    private TableView<Person> tabla;
     @FXML
-    private TableColumn<Patient, String> col_nombre;
+    private TableColumn<Person, String> col_nombre;
     @FXML
-    private TableColumn<Patient, String> col_apellidos;
+    private TableColumn<Person, String> col_apellidos;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //inicializa la base de datos en database
         database = ClinicDBAccess.getSingletonClinicDBAccess();
+        //inicializa los arraylist de pacientes y doctores
         pacientes = database.getPatients();
         doctores = database.getDoctors();
-        datos = FXCollections.observableArrayList(pacientes);
-        tabla.setItems(datos);
+        //inicializa observable lists de ambos
+        datos_pat = FXCollections.observableArrayList(pacientes);
+        datos_doc = FXCollections.observableArrayList(doctores);
+    }   
+    //inicializa tabla pacientes
+    private void initPatients(){
+        
+        //tabla.setItems(datos_pat);
         col_nombre.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getName()));
         col_apellidos.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getSurname()));
-    }    
+    }
+    //inicializa tabla doctores
+    private void initDoctors(){
+        //tabla.setItems(datos_doc);
+        col_nombre.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getName()));
+        col_apellidos.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+    }
     
 }
