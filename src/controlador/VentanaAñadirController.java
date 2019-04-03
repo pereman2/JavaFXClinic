@@ -7,6 +7,7 @@ package controlador;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
@@ -40,5 +41,14 @@ public class VentanaAñadirController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    private void aceptar(ActionEvent event) {
+        
+    }
+
+    @FXML
+    private void cancelar(ActionEvent event) {
+    }
     
 }
