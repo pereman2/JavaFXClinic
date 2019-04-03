@@ -7,19 +7,31 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="558.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.FXMLDocumentController">
    <center>
-      <TableView fx:id="tabla" prefHeight="459.0" prefWidth="508.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn fx:id="col_nombre" prefWidth="259.0" text="Nombre" />
-          <TableColumn fx:id="col_apellidos" prefWidth="340.0" text="Apellidos" />
-        </columns>
-      </TableView>
+      <StackPane BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="tabla_patient" prefHeight="459.0" prefWidth="508.0">
+              <columns>
+                <TableColumn fx:id="col_nombre" prefWidth="259.0" text="Nombre" />
+                <TableColumn fx:id="col_apellidos" prefWidth="340.0" text="Apellidos" />
+              </columns>
+            </TableView>
+            <TableView fx:id="tabla_doctor" prefHeight="459.0" prefWidth="508.0">
+               <columns>
+                  <TableColumn fx:id="col_nombre_doctor" prefWidth="259.0" text="Nombre" />
+                  <TableColumn fx:id="col_apellidos_doctor" prefWidth="340.0" text="Apellidos" />
+               </columns>
+            </TableView>
+         </children>
+      </StackPane>
    </center>
    <bottom>
       <HBox alignment="CENTER" prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
@@ -39,41 +51,59 @@
       </HBox>
    </bottom>
    <left>
-      <VBox alignment="CENTER" prefHeight="371.0" prefWidth="92.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="371.0" prefWidth="92.0" spacing="10.0" stylesheets="@estilo.css" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <children>
-            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_doctors" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/doctor_ico.png" />
+               </image>
             </ImageView>
-            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_patients" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/paciente_ico.png" />
+               </image>
             </ImageView>
-            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_appointments" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/citas_ico.png" />
+               </image>
             </ImageView>
             <Separator prefWidth="200.0" />
-            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#add_current" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/add_ico.png" />
+               </image>
             </ImageView>
-            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/buscar_ico.png" />
+               </image>
             </ImageView>
-            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/eliminar_ico.png" />
+               </image>
             </ImageView>
          </children>
       </VBox>
