@@ -27,8 +27,6 @@ import model.*;
 public class FXMLDocumentController implements Initializable {
     
     private Label label;
-    @FXML
-    private Button bot_añadir;
     private ClinicDBAccess database;
     private static ArrayList<Doctor> doctores;
     public static ArrayList<Patient> pacientes;
