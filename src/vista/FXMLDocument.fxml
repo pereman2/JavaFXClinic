@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -48,32 +49,50 @@
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/doctor_ico.png" />
+               </image>
             </ImageView>
             <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/paciente_ico.png" />
+               </image>
             </ImageView>
             <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/citas_ico.png" />
+               </image>
             </ImageView>
             <Separator prefWidth="200.0" />
             <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/add_ico.png" />
+               </image>
             </ImageView>
             <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/buscar_ico.png" />
+               </image>
             </ImageView>
             <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
+               <image>
+                  <Image url="@../images/eliminar_ico.png" />
+               </image>
             </ImageView>
          </children>
       </VBox>
