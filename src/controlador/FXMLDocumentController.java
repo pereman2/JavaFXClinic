@@ -15,6 +15,8 @@ import javafx.scene.control.Label;
 import DBAccess.ClinicDBAccess;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -133,6 +135,22 @@ public class FXMLDocumentController implements Initializable {
                 break;
             case 3:
                 break;
+        }
+    }
+
+    @FXML
+    private void añadirNuevo(MouseEvent event) {
+        FXMLLoader ventanaAñadir = new FXMLLoader (
+                        getClass().getResource("/vista/VentanaA.fxml"));
+        try {
+            Parent vAñadir = (Parent) ventanaAñadir.load();
+            Stage s = new Stage();
+            s.setScene(new Scene(vAñadir));
+            s.setResizable(false);                
+            s.show();
+        } 
+        catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
