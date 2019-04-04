@@ -84,10 +84,10 @@ public class VentanaAñadirController implements Initializable {
         FileNameExtensionFilter filtro = new FileNameExtensionFilter(
             "JPG & PNG Images","jpg", "png");
         exploradorJPG.setFileFilter(filtro);
-        exploradorJPG.setVisible(true);
-        if (exploradorJPG.getSelectedFile() != null) {
-            File imagen = exploradorJPG.getSelectedFile();            
-            img.setImage(new Image(imagen.getAbsolutePath()));
+        exploradorJPG.showOpenDialog(null);
+        if (exploradorJPG.getSelectedFile() != null) {                      
+            img.setImage(new Image(
+                    exploradorJPG.getSelectedFile().toURI().toString()));
         }
         hyperlink_img.setText("Cambiar imagen");
     }
