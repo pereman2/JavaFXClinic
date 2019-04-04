@@ -6,19 +6,21 @@
 package controlador;
 
 import DBAccess.ClinicDBAccess;
-import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -37,7 +39,7 @@ public class VentanaAñadirController implements Initializable {
     
     ObservableList<Patient> pacientes_local;
             
-    private String redBackground = "-fx-background-color: red;";
+    private String redBackground = "-fx-border-color: red;";
     
     @FXML
     private ImageView img;
@@ -58,28 +60,44 @@ public class VentanaAñadirController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         db = ClinicDBAccess.getSingletonClinicDBAccess();
+         db = ClinicDBAccess.getSingletonClinicDBAccess();         
+         field_nombre.setPromptText("Nombre");
+         field_apellidos.setPromptText("Apellidos");
+         field_dni.setPromptText("DNI");
+         field_telefono.setPromptText("Telefono");
+         initImage();
     }    
 
     @FXML
     private void aceptar(ActionEvent event) {
-        String name = field_nombre.getText();
-        String surname = field_apellidos.getText();
-        String identifier = field_dni.getText();
-        String telephon = field_telefono.getText();
-        Image photo = img.getImage();
-        Patient aux = new Patient(identifier, name, surname, telephon, photo);
-        FXMLDocumentController.getClinicDBAccess().getPatients().add(aux);
-        pacientes_local.add(aux);
-        ((Stage) img.getScene().getWindow()).close();
+        if (esCorrecto()) {
+            String name = field_nombre.getText();
+            String surname = field_apellidos.getText();
+            String identifier = field_dni.getText();
+            String telephon = field_telefono.getText();
+            Image photo = img.getImage();
+            Patient aux = new Patient(identifier, name, surname, telephon, photo);
+            FXMLDocumentController.getClinicDBAccess().getPatients().add(aux);
+            pacientes_local.add(aux);
+            ((Stage) img.getScene().getWindow()).close();
+        }
+        else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Carracteres introducidos incorrectos");
+            alert.showAndWait();
+        }
     }
 
     @FXML
     private void cancelar(ActionEvent event) {
+        Stage stage = (Stage) (
+                (Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
     
     @FXML
-    private void cambiarImagen(ActionEvent event) {
+    private void cambiarImagen(ActionEvent event) {        
         JFileChooser exploradorJPG = new JFileChooser();
         FileNameExtensionFilter filtro = new FileNameExtensionFilter(
             "JPG & PNG Images","jpg", "png");
@@ -92,13 +110,25 @@ public class VentanaAñadirController implements Initializable {
         hyperlink_img.setText("Cambiar imagen");
     }
     
+    private void initImage() {
+        Image aux = null; //extraure del la datebase
+        img.setImage(aux);
+        hyperlink_img.setText("Cambiar imagen");
+    }
+    
+    private boolean esCorrecto() {
+        return (field_nombre.getStyle() == redBackground) &&
+                (field_apellidos.getStyle() == redBackground) &&
+                (field_dni.getStyle() == redBackground) &&
+                (field_telefono.getStyle() == redBackground);
+    }
+    
     @FXML
     //Cambia el color del fondo cuando se escribe un
     //caracter incorrecto
     private void colorFondoCaracter(KeyEvent event) {        
         TextField id = (TextField) event.getSource();
-        boolean aux;
-        
+        boolean aux;        
         if (id == field_nombre || id == field_apellidos) {
             aux = caracteresCompatibles(id.getText(), NOMBRE_APELLIDOS);
         }
@@ -108,6 +138,7 @@ public class VentanaAñadirController implements Initializable {
         else {
             aux = caracteresCompatibles(id.getText(), TELEFONO);
         }
+        
         
         if (!aux) {
             id.setStyle(redBackground);
@@ -122,22 +153,20 @@ public class VentanaAñadirController implements Initializable {
         boolean res = false;
         switch (tipo) {
             case 0:
-                res = cadena.matches("[0-9]{7,8}[A-Za-z]");
+                res = cadena.matches("[0-9]*{8}[A-Za-z]*{1}");
                 break;
             case 1:
-                res = cadena.matches("[A-Za-z]");
+                res = cadena.matches("[A-Za-z]*");
                 break;
             case 2:
-                res = cadena.matches("[0-9]");
+                res = cadena.matches("[0-9]*");
                 break;            
         }
         return res;
     }
+    
     public void initListaPersona(ObservableList<Patient> pat) {
         pacientes_local = pat;
-    }
-    
-
-    
+    }  
     
 }

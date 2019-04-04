@@ -30,12 +30,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.*;
-/**
- *
- * @author pereman2
+/**  
+ * Datos ventana:
+ *  Altura --> 373 | Paciente
+ *  Altura -->     | Doctor 
  */
 public class FXMLDocumentController implements Initializable {
     private final int DOCTOR = 1;
@@ -46,11 +46,13 @@ public class FXMLDocumentController implements Initializable {
     
     private Label label;
     private static ClinicDBAccess database;
+    
     //arraylist de doctores,pacientes
     private static ArrayList<Doctor> doctores;
     public static ArrayList<Patient> pacientes;
     private static ObservableList<Patient> datos_pat = null;
     private static ObservableList<Doctor> datos_doc = null;
+    
     @FXML
     private TableColumn<Patient, String> col_nombre;
     @FXML
@@ -91,17 +93,16 @@ public class FXMLDocumentController implements Initializable {
         initDoctors();
         initPatients();
         
-        actual = 0;
-        
-        
-    }   
+        actual = 0;        
+    }  
+    
     //inicializa tabla pacientes
-    private void initPatients(){
-        
+    private void initPatients(){        
         tabla_patient.setItems(datos_pat);
         col_nombre.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getName()));
         col_apellidos.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getSurname()));
     }
+    
     //inicializa tabla doctores
     private void initDoctors(){
         tabla_doctor.setItems(datos_doc);
@@ -144,7 +145,7 @@ public class FXMLDocumentController implements Initializable {
                 Stage stage = new Stage();
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaA.fxml"));
                 Parent root = miLoader.load();
-                ((VentanaAñadirController)miLoader.getController()).initListaPersona(datos_pat);
+                ((VentanaAñadirController) miLoader.getController()).initListaPersona(datos_pat);
                 Scene scene = new Scene(root);
                 stage.setTitle("Añadir paciente");
                 stage.setScene(scene);
