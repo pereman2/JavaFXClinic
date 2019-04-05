@@ -140,7 +140,7 @@ public class FXMLDocumentController implements Initializable {
         switch(actual){
             case 1:
                 Stage stage_doctor = new Stage();
-                FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaA.fxml"));
+                FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirDoctor.fxml"));
                 Parent root_doctor = miLoader_doctor.load();
                 ((VentanaAñadirController) miLoader_doctor.getController()).initListaDoctor(datos_doc);
                 Scene scene_doctor = new Scene(root_doctor);
@@ -148,9 +148,10 @@ public class FXMLDocumentController implements Initializable {
                 stage_doctor.setScene(scene_doctor);
                 stage_doctor.showAndWait();
                 break;
+                
             case 2:
                 Stage stage = new Stage();
-                FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaA.fxml"));
+                FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
                 Parent root = miLoader.load();
                 ((VentanaAñadirController) miLoader.getController()).initListaPersona(datos_pat);
                 Scene scene = new Scene(root);
@@ -158,6 +159,7 @@ public class FXMLDocumentController implements Initializable {
                 stage.setScene(scene);
                 stage.showAndWait();
                 break;
+                
             case 3:
                 break;
         }

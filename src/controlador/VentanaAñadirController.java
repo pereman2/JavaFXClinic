@@ -7,6 +7,7 @@ package controlador;
 
 import DBAccess.ClinicDBAccess;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,17 +16,21 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Patient;
 import model.Doctor;
+import model.ExaminationRoom;
 
 /**
  * FXML Controller class
@@ -40,8 +45,14 @@ public class VentanaAñadirController implements Initializable {
     
     ObservableList<Patient> pacientes_local;
     ObservableList<Doctor> doctor_local;
+    ObservableList<VBox> days;
             
     private String redBackground = "-fx-border-color: red;";
+    private String vboxDaysBackground = "-fx-background-color: gray;" + 
+                                        "-fx-border-radius: 50px;" + 
+                                        "-fx-border-color: gray;" + 
+                                        "-fx-border-width: 3px;" +
+                                        "-fx-background-radius: 24px; ";
     
     @FXML
     private ImageView img;
@@ -56,6 +67,14 @@ public class VentanaAñadirController implements Initializable {
     @FXML
     private TextField field_telefono;
     ClinicDBAccess db;
+    @FXML
+    private ComboBox<String> combo_consulta;
+    @FXML
+    private ComboBox<Integer> combo_hora;
+    @FXML
+    private ComboBox<Integer> combo_min;
+    @FXML
+    private HBox hbox_days;
 
     /**
      * Initializes the controller class.
@@ -68,6 +87,8 @@ public class VentanaAñadirController implements Initializable {
          field_dni.setPromptText("DNI");
          field_telefono.setPromptText("Telefono");
          initImage();
+         initComboBox();
+         initDays();
     }    
 
     @FXML
@@ -112,11 +133,34 @@ public class VentanaAñadirController implements Initializable {
         hyperlink_img.setText("Cambiar imagen");
     }
     
+    //Inicializa todos los comboBox
+    private void initComboBox() {        
+        for (int x = 0; x <= 24; x++) {
+            combo_hora.getItems().add(x,x);
+        }
+        
+        for (int x = 0; x <= 3; x++) {
+            combo_min.getItems().add(x, x * 15);
+        }
+        
+        ArrayList<ExaminationRoom> aux = db.getExaminationRooms();
+        for (int x = 0; x < aux.size(); x++) {
+            combo_consulta.getItems().add(x, aux.get(x).toString());
+        }
+    }
+    
+    
     private void initImage() {
         Image aux = null; //extraure del la datebase
         img.setImage(aux);
         hyperlink_img.setText("Cambiar imagen");
-    }    
+    } 
+    
+    private void initDays() {
+        for (Node v : hbox_days.getChildren()) {
+            
+        }
+    }
     
     private boolean esCorrecto() {
         return (field_nombre.getStyle() == redBackground) &&
@@ -174,5 +218,26 @@ public class VentanaAñadirController implements Initializable {
     public void initListaDoctor(ObservableList<Doctor> doc) {
         doctor_local = doc;
     }
+    
+
+    @FXML
+    private void diasClicked(MouseEvent event) {
+        VBox id = (VBox) event.getSource();
+        if (estabaSeleccionado(event)) {
+            id.setStyle("-fx-background-color: transparent;"+ 
+                             "-fx-border-radius: 50px;" + 
+                             "-fx-border-color: gray;" + 
+                             "-fx-border-width: 3px;" +
+                             "-fx-background-radius: 24px;" );
+        }
+        else {
+            id.setStyle(vboxDaysBackground); 
+        }               
+    }
+    
+    private boolean estabaSeleccionado(MouseEvent e) {
+        String aux_style = ((VBox) e.getSource()).getStyle();
+        return aux_style.matches(vboxDaysBackground);
+    } 
     
 }

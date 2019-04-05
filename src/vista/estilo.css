@@ -4,16 +4,10 @@
     -fx-scale-z: 1.2;
 }
 
-
-.img:target{
-    -fx-border-color: red;
-    -fx-border-radius: 24px;   
-}
-
 .img_persona {
     -fx-alignment: center;
     -fx-border-radius: 24px;
-    -fx-border-color: white;
+    -fx-border-color: gray;
     -fx-border-width: 3px;
     -fx-text-box-border: transparent;    
     -fx-background-radius: 24px;   
@@ -34,6 +28,26 @@
 
 .btnCancelar:hover {
     -fx-border-color: red;
+}
+
+.vboxDays:hover {
+    -fx-background-radius: 50px;
+    -fx-background-color: gray;
+}
+
+.vboxDays {
+    -fx-border-radius: 50px;
+    -fx-border-color: gray;
+    -fx-border-width: 3px;
+    -fx-background-radius: 24px; 
+}
+
+.comboBoxConsulta {
+    -fx-border-radius: 50px;
+    -fx-border-color: gray;
+    -fx-border-width: 3px;
+    -fx-background-radius: 24px;
+    -fx-background-color: transparent;
 }
 
 
