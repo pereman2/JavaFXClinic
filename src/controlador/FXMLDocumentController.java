@@ -139,7 +139,14 @@ public class FXMLDocumentController implements Initializable {
     private void add_current(MouseEvent event) throws IOException{
         switch(actual){
             case 1:
-                
+                Stage stage_doctor = new Stage();
+                FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaA.fxml"));
+                Parent root_doctor = miLoader_doctor.load();
+                ((VentanaAñadirController) miLoader_doctor.getController()).initListaDoctor(datos_doc);
+                Scene scene_doctor = new Scene(root_doctor);
+                stage_doctor.setTitle("Añadir doctor");
+                stage_doctor.setScene(scene_doctor);
+                stage_doctor.showAndWait();
                 break;
             case 2:
                 Stage stage = new Stage();
@@ -156,20 +163,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    private void añadirNuevo(MouseEvent event) {
-        FXMLLoader ventanaAñadir = new FXMLLoader (
-                        getClass().getResource("/vista/VentanaA.fxml"));
-        try {
-            Parent vAñadir = (Parent) ventanaAñadir.load();
-            Stage s = new Stage();
-            s.setScene(new Scene(vAñadir));
-            s.setResizable(false);                
-            s.show();
-        } 
-        catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
     public static ClinicDBAccess getClinicDBAccess(){
         return database;
     }
@@ -178,8 +172,16 @@ public class FXMLDocumentController implements Initializable {
     private void eliminar(MouseEvent event) {
         switch(actual){
             case DOCTOR:
-                
+                Doctor aux_doctor = tabla_doctor.getSelectionModel().getSelectedItem();
+                if (database.hasAppointments(aux_doctor)) {
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                    alerta.setTitle("Cita encontrada");
+                    alerta.setHeaderText("El cliente ya tiene una cita");
+                    alerta.setContentText("Imposible eliminar paciente con una cita asignada");
+                    alerta.showAndWait();
+                }                
                 break;
+                
             case PATIENT:
                 Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
                 if (database.hasAppointments(aux)) {

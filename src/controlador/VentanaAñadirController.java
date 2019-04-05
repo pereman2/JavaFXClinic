@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Patient;
+import model.Doctor;
 
 /**
  * FXML Controller class
@@ -38,6 +39,7 @@ public class VentanaAñadirController implements Initializable {
     public static final int TELEFONO = 2;
     
     ObservableList<Patient> pacientes_local;
+    ObservableList<Doctor> doctor_local;
             
     private String redBackground = "-fx-border-color: red;";
     
@@ -114,7 +116,7 @@ public class VentanaAñadirController implements Initializable {
         Image aux = null; //extraure del la datebase
         img.setImage(aux);
         hyperlink_img.setText("Cambiar imagen");
-    }
+    }    
     
     private boolean esCorrecto() {
         return (field_nombre.getStyle() == redBackground) &&
@@ -153,13 +155,13 @@ public class VentanaAñadirController implements Initializable {
         boolean res = false;
         switch (tipo) {
             case 0:
-                res = cadena.matches("[0-9]*{8}[A-Za-z]*{1}");
+                res = cadena.matches("[0-9]{7,8}[A-Za-z]{1}");
                 break;
             case 1:
-                res = cadena.matches("[A-Za-z]*");
+                res = cadena.matches("[A-Za-z]*[ñ]*");
                 break;
             case 2:
-                res = cadena.matches("[0-9]*");
+                res = cadena.matches("[0-9]{9}");
                 break;            
         }
         return res;
@@ -168,5 +170,9 @@ public class VentanaAñadirController implements Initializable {
     public void initListaPersona(ObservableList<Patient> pat) {
         pacientes_local = pat;
     }  
+    
+    public void initListaDoctor(ObservableList<Doctor> doc) {
+        doctor_local = doc;
+    }
     
 }

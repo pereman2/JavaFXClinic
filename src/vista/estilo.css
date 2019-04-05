@@ -19,5 +19,22 @@
     -fx-background-radius: 24px;   
 }
 
+.btnAceptar, .btnCancelar {
+    -fx-alignment: center;
+    -fx-border-radius: 24px;
+    -fx-border-color: white;
+    -fx-border-width: 3px;
+    -fx-text-box-border: transparent;    
+    -fx-background-radius: 24px;   
+}
+
+.btnAceptar:hover {
+    -fx-border-color: blue;
+}
+
+.btnCancelar:hover {
+    -fx-border-color: red;
+}
+
 
 

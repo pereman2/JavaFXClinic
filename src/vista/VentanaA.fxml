@@ -55,12 +55,12 @@
       </HBox>
       <HBox alignment="BOTTOM_RIGHT" layoutX="249.0" layoutY="252.0" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#aceptar" text="Aceptar">
+            <Button id="btn" mnemonicParsing="false" onAction="#aceptar" styleClass="btnAceptar" stylesheets="@estilo.css" text="Aceptar">
                <HBox.margin>
                   <Insets bottom="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+            <Button id="btn" mnemonicParsing="false" onAction="#cancelar" styleClass="btnCancelar" stylesheets="@estilo.css" text="Cancelar">
                <HBox.margin>
                   <Insets bottom="10.0" />
                </HBox.margin>
