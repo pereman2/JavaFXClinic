@@ -57,12 +57,12 @@
          </BorderPane.margin>
          <children>
             <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_doctors" pickOnBounds="true" preserveRatio="true" styleClass="img">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
                <image>
                   <Image url="@../images/doctor_ico.png" />
                </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
             </ImageView>
             <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_patients" pickOnBounds="true" preserveRatio="true" styleClass="img">
                <VBox.margin>
