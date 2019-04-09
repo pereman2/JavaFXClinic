@@ -62,12 +62,6 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Doctor, String> col_nombre_doctor;
     @FXML
     private TableColumn<Doctor, String> col_apellidos_doctor;
-    @FXML
-    private TextField texto_filtro;
-    @FXML
-    private ComboBox<?> cb_tipoFiltro;
-    @FXML
-    private Button btn_filtrar;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -190,6 +184,32 @@ public class FXMLDocumentController implements Initializable {
 
                 database.getPatients().remove(aux);
                 datos_pat.remove(aux);
+                break;
+            case APPOINTMENT:
+                break;
+        }
+    }
+
+    @FXML
+    private void visualizar(MouseEvent event) throws IOException {
+        switch(actual){
+            case DOCTOR:
+                Doctor aux_doctor = tabla_doctor.getSelectionModel().getSelectedItem();
+                             
+                break;
+                
+            case PATIENT:
+                Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
+                Stage stage = new Stage();
+                FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
+                Parent root = miLoader.load();
+                ((VentanaAñadirController) miLoader.getController()).initPatient(aux);
+                Scene scene = new Scene(root);
+                stage.setTitle("Visualizar paciente");
+                stage.setScene(scene);
+                stage.showAndWait();
+
+                
                 break;
             case APPOINTMENT:
                 break;

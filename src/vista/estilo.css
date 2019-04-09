@@ -54,6 +54,12 @@
     -fx-background-radius: 24px;
     -fx-background-color: transparent;
 }
-
-
+.main{
+    -fx-background-color: #FFF5EE;
+}
+.lista{
+    -fx-border-color: black;
+    -fx-border-style: bold;
+    -fx-border-width: 4px;
+}
 
