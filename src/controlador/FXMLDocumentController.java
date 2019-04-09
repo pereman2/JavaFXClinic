@@ -109,22 +109,26 @@ public class FXMLDocumentController implements Initializable {
         pacientes.add(pat);
     }
 
+    @FXML
     private void show_doctors(MouseEvent event) {
         tabla_patient.setVisible(false);
         tabla_doctor.setVisible(true);
         actual = 1;
     }
 
+    @FXML
     private void show_patients(MouseEvent event) {
         tabla_doctor.setVisible(false);
         tabla_patient.setVisible(true);
         actual = 2;
     }
 
+    @FXML
     private void show_appointments(MouseEvent event) {
         actual = 3;
     }
 
+    @FXML
     private void add_current(MouseEvent event) throws IOException{
         switch(actual){
             case 1:
@@ -159,6 +163,7 @@ public class FXMLDocumentController implements Initializable {
         return database;
     }
 
+    @FXML
     private void eliminar(MouseEvent event) {
         switch(actual){
             case DOCTOR:
@@ -190,6 +195,7 @@ public class FXMLDocumentController implements Initializable {
                 break;
         }
     }
+
 
     
 }
