@@ -63,10 +63,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Doctor, String> col_apellidos_doctor;
     @FXML
-    private ImageView img_filtrar;
-    @FXML
-    private ImageView img_eliminar;
-    @FXML
     private TextField texto_filtro;
     @FXML
     private ComboBox<?> cb_tipoFiltro;
@@ -113,26 +109,22 @@ public class FXMLDocumentController implements Initializable {
         pacientes.add(pat);
     }
 
-    @FXML
     private void show_doctors(MouseEvent event) {
         tabla_patient.setVisible(false);
         tabla_doctor.setVisible(true);
         actual = 1;
     }
 
-    @FXML
     private void show_patients(MouseEvent event) {
         tabla_doctor.setVisible(false);
         tabla_patient.setVisible(true);
         actual = 2;
     }
 
-    @FXML
     private void show_appointments(MouseEvent event) {
         actual = 3;
     }
 
-    @FXML
     private void add_current(MouseEvent event) throws IOException{
         switch(actual){
             case 1:
@@ -167,7 +159,6 @@ public class FXMLDocumentController implements Initializable {
         return database;
     }
 
-    @FXML
     private void eliminar(MouseEvent event) {
         switch(actual){
             case DOCTOR:
@@ -200,8 +191,5 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    @FXML
-    private void visualizar(MouseEvent event) {
-    }
     
 }

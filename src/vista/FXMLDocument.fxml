@@ -56,55 +56,61 @@
             <Insets />
          </BorderPane.margin>
          <children>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_doctors" pickOnBounds="true" preserveRatio="true" styleClass="img">
-               <image>
-                  <Image url="@../images/doctor_ico.png" />
-               </image>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_patients" pickOnBounds="true" preserveRatio="true" styleClass="img">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-               <image>
-                  <Image url="@../images/paciente_ico.png" />
-               </image>
-            </ImageView>
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#show_appointments" pickOnBounds="true" preserveRatio="true" styleClass="img">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-               <image>
-                  <Image url="@../images/citas_ico.png" />
-               </image>
-            </ImageView>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="img">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/doctor_ico.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="img">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/paciente_ico.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="img">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/citas_ico.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             <Separator prefWidth="200.0" />
-            <ImageView id="img" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#add_current" pickOnBounds="true" preserveRatio="true" styleClass="img">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-               <image>
-                  <Image url="@../images/add_ico.png" />
-               </image>
-            </ImageView>
-            <ImageView id="img" fx:id="img_filtrar" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#visualizar" pickOnBounds="true" preserveRatio="true" styleClass="img">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-               <image>
-                  <Image url="@../images/buscar_ico.png" />
-               </image>
-            </ImageView>
-            <ImageView id="img" fx:id="img_eliminar" fitHeight="64.0" fitWidth="64.0" onMouseClicked="#eliminar" pickOnBounds="true" preserveRatio="true" styleClass="img">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-               <image>
-                  <Image url="@../images/eliminar_ico.png" />
-               </image>
-            </ImageView>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="img">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/add_ico.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="img">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/buscar_ico.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="img">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/eliminar_ico.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </VBox>
    </left>

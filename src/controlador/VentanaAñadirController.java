@@ -188,10 +188,10 @@ public class VentanaAñadirController implements Initializable {
     }
     
     private boolean esCorrecto() {
-        return (field_nombre.getStyle() == redBackground) &&
-                (field_apellidos.getStyle() == redBackground) &&
-                (field_dni.getStyle() == redBackground) &&
-                (field_telefono.getStyle() == redBackground);
+        return (field_nombre.getStyle() != redBackground) &&
+                (field_apellidos.getStyle() != redBackground) &&
+                (field_dni.getStyle() != redBackground) &&
+                (field_telefono.getStyle() != redBackground);
     }
     
     @FXML
