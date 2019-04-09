@@ -8,6 +8,7 @@ package controlador;
 import DBAccess.ClinicDBAccess;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -46,10 +47,10 @@ public class VentanaAñadirController implements Initializable {
     
     ObservableList<Patient> pacientes_local;
     ObservableList<Doctor> doctor_local;
-    ObservableList<VBox> days;
+    
     
     private boolean isDoctor = false;
-            
+    private boolean[] days;        
     private String redBackground = "-fx-border-color: red;";
     private String vboxDaysBackground = "-fx-background-color: gray;" + 
                                         "-fx-border-radius: 50px;" + 
@@ -89,11 +90,12 @@ public class VentanaAñadirController implements Initializable {
         field_apellidos.setPromptText("Apellidos");
         field_dni.setPromptText("DNI");
         field_telefono.setPromptText("Telefono");
-        initImage();
+        //initImage();
         FXMLLoader fmxl = new FXMLLoader(url);
         if (fmxl.equals(new FXMLLoader(
                 getClass().getResource(
                 "/vista/VentanaAñadirDoctor.fxml")))) {
+            days = new boolean[7];
             isDoctor = true;
             initComboBox();
             initDays();
@@ -103,15 +105,15 @@ public class VentanaAñadirController implements Initializable {
     @FXML
     private void aceptar(ActionEvent event) {
         if (esCorrecto()) {
+            String name = field_nombre.getText();
+            String surname = field_apellidos.getText();
+            String identifier = field_dni.getText();
+            String telephon = field_telefono.getText();
+            Image photo = img.getImage();
             if (isDoctor) {            
                 
             }
-            else {
-                String name = field_nombre.getText();
-                String surname = field_apellidos.getText();
-                String identifier = field_dni.getText();
-                String telephon = field_telefono.getText();
-                Image photo = img.getImage();
+            else {                
                 Patient aux = new Patient(identifier, name, surname, telephon, photo);
                 FXMLDocumentController.getClinicDBAccess().getPatients().add(aux);
                 pacientes_local.add(aux);
@@ -124,6 +126,10 @@ public class VentanaAñadirController implements Initializable {
             alert.setHeaderText("Carracteres introducidos incorrectos");
             alert.showAndWait();
         }
+    }
+    
+    public void datosIncorrectos() {
+        
     }
 
     @FXML
@@ -147,7 +153,7 @@ public class VentanaAñadirController implements Initializable {
         hyperlink_img.setText("Cambiar imagen");
     }
     
-    //Inicializa todos los comboBox
+    //Inicializa todos los comboBox del fxml doctor
     private void initComboBox() {        
         for (int x = 0; x <= 24; x++) {
             combo_hora.getItems().add(x,x);
@@ -163,17 +169,22 @@ public class VentanaAñadirController implements Initializable {
         }
     }
     
-    
+    //Inicia la imagen.
     private void initImage() {
         Image aux = null; //extraure del la datebase
         img.setImage(aux);
         hyperlink_img.setText("Cambiar imagen");
     } 
     
-    private void initDays() {
-        for (Node v : hbox_days.getChildren()) {
-            
-        }
+    //Obtiene los hbox;
+    private void initDays() {  
+        ObservableList<Node> aux = hbox_days.getChildren();        
+        int pos = 0;        
+        while (pos < aux.size()) {
+            VBox v = (VBox) aux.get(pos);
+            v.setId(String.valueOf(pos));            
+            pos++;
+        }       
     }
     
     private boolean esCorrecto() {
@@ -209,7 +220,8 @@ public class VentanaAñadirController implements Initializable {
         }
     }
     
-    
+    //Conjunto de caracteres o cadenas aceptadas en el 
+    //textField segun el tipo
     private boolean caracteresCompatibles (String cadena, int tipo) { 
         boolean res = false;
         switch (tipo) {
@@ -217,7 +229,7 @@ public class VentanaAñadirController implements Initializable {
                 res = cadena.matches("[0-9]{7,8}[A-Za-z]{1}");
                 break;
             case 1:
-                res = cadena.matches("[A-Za-z]*[ñ]*");
+                res = cadena.matches("([A-Za-z]*[ñ]*[ ]*){1,2}");
                 break;
             case 2:
                 res = cadena.matches("[0-9]{9}");
@@ -234,7 +246,7 @@ public class VentanaAñadirController implements Initializable {
         doctor_local = doc;
     }
     
-
+    
     @FXML
     private void diasClicked(MouseEvent event) {
         VBox id = (VBox) event.getSource();
@@ -244,9 +256,11 @@ public class VentanaAñadirController implements Initializable {
                              "-fx-border-color: gray;" + 
                              "-fx-border-width: 3px;" +
                              "-fx-background-radius: 24px;" );
+            days[Integer.parseInt(id.getId())] = true;
         }
         else {
-            id.setStyle(vboxDaysBackground); 
+            id.setStyle(vboxDaysBackground);
+            days[Integer.parseInt(id.getId())] = false;
         }               
     }
     

@@ -32,11 +32,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.*;
-/**  
- * Datos ventana:
- *  Altura --> 373 | Paciente
- *  Altura -->     | Doctor 
- */
+
+
 public class FXMLDocumentController implements Initializable {
     private final int DOCTOR = 1;
     private final int PATIENT = 2;
