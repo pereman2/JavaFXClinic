@@ -208,8 +208,7 @@ public class VentanaAñadirController implements Initializable {
         }
         else if (id == field_telefono){
             aux = caracteresCompatibles(id.getText(), TELEFONO);
-        }
-        
+        }       
         
         
         if (!aux) {
