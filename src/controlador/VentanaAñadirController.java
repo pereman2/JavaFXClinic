@@ -136,9 +136,7 @@ public class VentanaAñadirController implements Initializable {
                 
                 db.getDoctors().add(aux);
                 doctor_local.add(aux);
-                ((Stage) img.getScene().getWindow()).close();
-                
-                
+                ((Stage) img.getScene().getWindow()).close();               
             }
             else {                
                 Patient aux = new Patient(identifier, name, surname, telephon, photo);
@@ -190,7 +188,7 @@ public class VentanaAñadirController implements Initializable {
         int i = 0;
         for(Node v : hbox.getChildren()){
             if(days[i] == true){
-                
+            
             }
         }
         return null;
@@ -220,7 +218,7 @@ public class VentanaAñadirController implements Initializable {
         hyperlink_img.setText("Cambiar imagen");
     } 
     
-    //Obtiene los hbox;
+    //Obtiene los hbox añadiendo el como nombre la posicion del dia de la semana;
     private void initDays() {  
         ObservableList<Node> aux = hbox_days.getChildren();        
         int pos = 0;        
@@ -230,7 +228,7 @@ public class VentanaAñadirController implements Initializable {
             pos++;
         }       
     }
-    
+    //Comprueba si los datos introducidos son correctos.
     private boolean esCorrecto() {
         return (field_nombre.getStyle() != redBackground) &&
                 (field_apellidos.getStyle() != redBackground) &&
@@ -281,13 +279,16 @@ public class VentanaAñadirController implements Initializable {
         return res;
     }
     
+    
+    //Inicializa las observable list del paciente y el doctor.
     public void initListaPersona(ObservableList<Patient> pat) {
         pacientes_local = pat;
-    }  
-    
+    }     
     public void initListaDoctor(ObservableList<Doctor> doc) {
         doctor_local = doc;
     }
+    
+    
     public void initPatient(Patient pat){
         field_nombre.setText(pat.getName());
         field_apellidos.setText(pat.getSurname());

@@ -15,6 +15,14 @@
     -fx-background-radius: 24px;   
 }
 
+.textfields {
+    -fx-border-width: 3px;
+    -fx-border-radius: 24px;
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-background-radius: 24px;   
+}
+
 .btnAceptar, .btnCancelar {
     -fx-alignment: center;
     -fx-border-radius: 24px;
