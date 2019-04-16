@@ -25,11 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import model.Doctor;
 import model.Patient;
 
-/**
- * FXML Controller class
- *
- * @author deblack
- */
+
 public class AñadirCitaController implements Initializable {
 
     public static final int DOCTOR = 0;
@@ -37,6 +33,8 @@ public class AñadirCitaController implements Initializable {
     
     private double initW;
     private double initH;
+    private Patient pacienteSelecionado;
+    private Doctor doctorSelecionado;
     private static ClinicDBAccess database;
     private static ArrayList<Doctor> doctores;
     private static ArrayList<Patient> pacientes;
@@ -74,12 +72,14 @@ public class AñadirCitaController implements Initializable {
         database = FXMLDocumentController.getClinicDBAccess();
         doctores = database.getDoctors();
         pacientes = database.getPatients();
+        nombreDoctor.setPromptText("Nombre paciente");
+        nombrePaciente.setPromptText("Nombre Doctor");
     }    
 
     @FXML
-    private void mostrarPaciente(MouseEvent event) {
+    private void mostrarPaciente(MouseEvent event) {        
         infoPaciente.setVisible(true);
-        infoDoctor.setVisible(false);
+        infoDoctor.setVisible(false);        
         ObservableList<Patient> aux = FXCollections.observableArrayList(
                                         filtrarPacientes(nombrePaciente.getText()));
         infoPaciente.setItems(aux);
@@ -120,6 +120,27 @@ public class AñadirCitaController implements Initializable {
             }
         }          
         return aux;
+    }
+
+    @FXML
+    private void selecionar(MouseEvent event) {
+        TableView aux = (TableView) event.getSource();
+        if (aux == infoDoctor) {
+            doctorSelecionado = 
+                    (Doctor) aux.getSelectionModel().getSelectedItem();
+            nombreDoctor.setText(doctorSelecionado.getName() + " " 
+                                     + doctorSelecionado.getSurname());            
+        }
+        
+        else if (aux == infoPaciente) {
+            pacienteSelecionado = 
+                    (Patient) aux.getSelectionModel().getSelectedItem();
+            nombrePaciente.setText(pacienteSelecionado.getName() + " " 
+                                     + pacienteSelecionado.getSurname());
+        }
+        
+        
+        
     }
     
 }

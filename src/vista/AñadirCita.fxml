@@ -21,13 +21,13 @@
       <ComboBox layoutX="127.0" layoutY="102.0" prefHeight="32.0" prefWidth="88.0" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
       <StackPane layoutX="27.0" layoutY="157.0" prefHeight="265.0" prefWidth="377.0">
          <children>
-            <TableView fx:id="infoDoctor" prefHeight="237.0" prefWidth="377.0">
+            <TableView fx:id="infoDoctor" onMouseClicked="#selecionar" prefHeight="237.0" prefWidth="377.0">
               <columns>
                 <TableColumn fx:id="nomDoctor" prefWidth="152.0" text="Nombre" />
                 <TableColumn fx:id="apellidoDoctor" prefWidth="224.0" text="Apellido" />
               </columns>
             </TableView>
-            <TableView fx:id="infoPaciente" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="infoPaciente" onMouseClicked="#selecionar" prefHeight="200.0" prefWidth="200.0">
               <columns>
                 <TableColumn fx:id="nomPaciente" prefWidth="148.0" text="Nombre" />
                 <TableColumn fx:id="apellidoPaciente" prefWidth="228.0" text="Apellidos" />
