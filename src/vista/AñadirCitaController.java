@@ -7,9 +7,13 @@ package vista;
 
 import DBAccess.ClinicDBAccess;
 import controlador.FXMLDocumentController;
+import static controlador.FXMLDocumentController.pacientes;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -76,15 +80,29 @@ public class AñadirCitaController implements Initializable {
     private void mostrarPaciente(MouseEvent event) {
         infoPaciente.setVisible(true);
         infoDoctor.setVisible(false);
+        ObservableList<Patient> aux = FXCollections.observableArrayList(
+                                        filtrarPacientes(nombrePaciente.getText()));
+        infoPaciente.setItems(aux);
+        nomPaciente.setCellValueFactory(c -> 
+                new ReadOnlyObjectWrapper(c.getValue().getName()));
+        apellidoPaciente.setCellValueFactory(c -> 
+                new ReadOnlyObjectWrapper(c.getValue().getSurname()));
     }
 
     @FXML
     private void mostrarDoctor(MouseEvent event) {
         infoDoctor.setVisible(true);
-        infoPaciente.setVisible(false);       
+        infoPaciente.setVisible(false); 
+        ObservableList<Doctor> aux = FXCollections.observableArrayList(
+                                        filtrarDoctor(nombreDoctor.getText()));
+        infoDoctor.setItems(aux);
+        nomDoctor.setCellValueFactory(c -> 
+                new ReadOnlyObjectWrapper(c.getValue().getName()));
+        apellidoDoctor.setCellValueFactory(c -> 
+                new ReadOnlyObjectWrapper(c.getValue().getSurname()));
     }    
     
-    private ArrayList<Doctor> filtrarDoctor(String nombre, int Tipo) {
+    private ArrayList<Doctor> filtrarDoctor(String nombre) {
         ArrayList<Doctor> aux = null;      
         for (int i = 0; i < doctores.size(); i++) {
             if (doctores.get(i).getName().equals(nombre)) {
