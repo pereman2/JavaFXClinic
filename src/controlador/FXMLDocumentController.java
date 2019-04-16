@@ -62,6 +62,16 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Doctor, String> col_nombre_doctor;
     @FXML
     private TableColumn<Doctor, String> col_apellidos_doctor;
+    @FXML
+    private TextField texto_filtro;
+    @FXML
+    private ComboBox<?> cb_tipoFiltro;
+    @FXML
+    private Button btn_filtrar;
+    @FXML
+    private Button btn_doctor;
+    @FXML
+    private Button btn_paciente;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -105,6 +115,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void show_doctors(MouseEvent event) {
+        setBackgroundButton((Button) event.getSource());
         tabla_patient.setVisible(false);
         tabla_doctor.setVisible(true);
         actual = 1;
@@ -112,9 +123,43 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void show_patients(MouseEvent event) {
+        setBackgroundButton((Button) event.getSource());        
         tabla_doctor.setVisible(false);
         tabla_patient.setVisible(true);
         actual = 2;
+    }
+    
+    public void setBackgroundButton(Button b) {
+        String style = "-fx-background-color: gray;" + 
+                        "-fx-border-radius: 24px;" + 
+                        "-fx-border-color: gray;" + 
+                        "-fx-border-width: 5px;" +
+                        "-fx-background-radius: 24px; ";
+        
+        String initStyle = "-fx-background-color: transparent;" + 
+                            "-fx-border-radius: 24px;" + 
+                            "-fx-border-color: transparent;" + 
+                            "-fx-border-width: 5px;" +
+                            "-fx-background-radius: 24px; ";
+        
+        if (btn_doctor.getStyle().equals(style) && b == btn_paciente) {
+            btn_doctor.setStyle(initStyle);
+            btn_paciente.setStyle(style);
+        }
+        else if (btn_paciente.getStyle().equals(style) && b == btn_doctor) {
+            btn_doctor.setStyle(style);
+            btn_paciente.setStyle(initStyle);
+        }
+        else {
+            if(style.equals(b.getStyle())) {
+                b.setStyle(initStyle);
+            }
+            else {            
+                b.setStyle(style);
+            }
+        }
+        
+       
     }
 
     @FXML
