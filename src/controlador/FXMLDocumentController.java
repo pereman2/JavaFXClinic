@@ -39,7 +39,7 @@ public class FXMLDocumentController implements Initializable {
     private final int PATIENT = 2;
     private final int APPOINTMENT = 3;
     
-    private int actual;
+    public static int actual;
     
     private Label label;
     private static ClinicDBAccess database;
@@ -165,10 +165,13 @@ public class FXMLDocumentController implements Initializable {
                 if (database.hasAppointments(aux_doctor)) {
                     Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                     alerta.setTitle("Cita encontrada");
-                    alerta.setHeaderText("El cliente ya tiene una cita");
-                    alerta.setContentText("Imposible eliminar paciente con una cita asignada");
+                    alerta.setHeaderText("El doctor ya tiene una cita");
+                    alerta.setContentText("Imposible eliminar doctor con una cita asignada");
                     alerta.showAndWait();
-                }                
+                    break;
+                }         
+                database.getDoctors().remove(aux_doctor);
+                datos_doc.remove(aux_doctor);
                 break;
                 
             case PATIENT:
@@ -176,7 +179,7 @@ public class FXMLDocumentController implements Initializable {
                 if (database.hasAppointments(aux)) {
                     Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                     alerta.setTitle("Cita encontrada");
-                    alerta.setHeaderText("El cliente ya tiene una cita");
+                    alerta.setHeaderText("El paciente ya tiene una cita");
                     alerta.setContentText("Imposible eliminar paciente con una cita asignada");
                     alerta.showAndWait();
                     break;
@@ -195,7 +198,14 @@ public class FXMLDocumentController implements Initializable {
         switch(actual){
             case DOCTOR:
                 Doctor aux_doctor = tabla_doctor.getSelectionModel().getSelectedItem();
-                             
+                Stage stage_doctor = new Stage();
+                FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirDoctor.fxml"));
+                Parent root_doctor = miLoader_doctor.load();
+                ((VentanaAñadirController) miLoader_doctor.getController()).initDoctor(aux_doctor);
+                Scene scene_doctor = new Scene(root_doctor);
+                stage_doctor.setTitle("Visualizar doctor");
+                stage_doctor.setScene(scene_doctor);
+                stage_doctor.showAndWait();             
                 break;
                 
             case PATIENT:
@@ -208,8 +218,6 @@ public class FXMLDocumentController implements Initializable {
                 stage.setTitle("Visualizar paciente");
                 stage.setScene(scene);
                 stage.showAndWait();
-
-                
                 break;
             case APPOINTMENT:
                 break;
