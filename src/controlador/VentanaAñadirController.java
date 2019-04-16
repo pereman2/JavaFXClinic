@@ -7,6 +7,7 @@ package controlador;
 
 import DBAccess.ClinicDBAccess;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -19,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import model.Days;
 import model.Patient;
 import model.Doctor;
 import model.ExaminationRoom;
@@ -71,20 +74,26 @@ public class VentanaAñadirController implements Initializable {
     private TextField field_telefono;
     ClinicDBAccess db;
     @FXML
-    private ComboBox<String> combo_consulta;
+    private ComboBox<Integer> combo_consulta;
     @FXML
     private ComboBox<Integer> combo_hora;
     @FXML
     private ComboBox<Integer> combo_min;
     @FXML
     private HBox hbox_days;
-
+    @FXML
+    private ComboBox<Integer> combo_hora1;
+    @FXML
+    private ComboBox<Integer> combo_min1;
+    
+    private ArrayList<ExaminationRoom> examination_rooms;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        db = ClinicDBAccess.getSingletonClinicDBAccess();         
+        db = FXMLDocumentController.getClinicDBAccess();
+        examination_rooms = db.getExaminationRooms();
         field_nombre.setPromptText("Nombre");
         field_apellidos.setPromptText("Apellidos");
         field_dni.setPromptText("DNI");
@@ -110,6 +119,25 @@ public class VentanaAñadirController implements Initializable {
             String telephon = field_telefono.getText();
             Image photo = img.getImage();
             if (isDoctor) {            
+                Doctor aux = new Doctor();
+                aux.setName(field_nombre.getText());
+                aux.setSurname(aux.getSurname());
+                aux.setTelephon(aux.getTelephon());
+                aux.setIdentifier(field_dni.getText());
+                aux.setVisitDays(getDays());
+                aux.setExaminationRoom(examination_rooms.get(
+                                        combo_consulta.getSelectionModel().getSelectedItem()));
+                LocalTime lt1 = LocalTime.of(combo_hora.getSelectionModel().getSelectedItem(),
+                                            combo_min.getSelectionModel().getSelectedItem());
+                aux.setVisitStartTime(lt1);
+                LocalTime lt2 = LocalTime.of(combo_hora1.getSelectionModel().getSelectedItem(),
+                                            combo_min1.getSelectionModel().getSelectedItem());
+                
+                
+                db.getDoctors().add(aux);
+                doctor_local.add(aux);
+                ((Stage) img.getScene().getWindow()).close();
+                
                 
             }
             else {                
@@ -127,8 +155,14 @@ public class VentanaAñadirController implements Initializable {
         }
     }
     
-    public void datosIncorrectos() {
-        
+    //Devuelve el arraylist<Days> necesario para crear el doctor :)))
+    public ArrayList<Days> getDays() {
+        ArrayList<Days> res = new ArrayList<Days>();
+        Days[] aux = Days.values();
+        for(int i= 0; i < days.length; i++){
+            if(days[i]) res.add(aux[i]);
+        }
+        return res;
     }
 
     @FXML
@@ -152,19 +186,30 @@ public class VentanaAñadirController implements Initializable {
         hyperlink_img.setText("Cambiar imagen");
     }
     
+    private Days getDays(HBox hbox){
+        int i = 0;
+        for(Node v : hbox.getChildren()){
+            if(days[i] == true){
+                
+            }
+        }
+        return null;
+    }
+    
     //Inicializa todos los comboBox del fxml doctor
     private void initComboBox() {        
         for (int x = 0; x <= 24; x++) {
             combo_hora.getItems().add(x,x);
+            combo_hora1.getItems().add(x,x);
         }
         
         for (int x = 0; x <= 3; x++) {
             combo_min.getItems().add(x, x * 15);
+            combo_min1.getItems().add(x, x * 15);
         }
         
-        ArrayList<ExaminationRoom> aux = db.getExaminationRooms();
-        for (int x = 0; x < aux.size(); x++) {
-            combo_consulta.getItems().add(x, aux.get(x).toString());
+        for (int x = 0; x < examination_rooms.size(); x++) {
+            combo_consulta.getItems().add(x, examination_rooms.get(x).getIdentNumber());
         }
     }
     
@@ -242,6 +287,21 @@ public class VentanaAñadirController implements Initializable {
     
     public void initListaDoctor(ObservableList<Doctor> doc) {
         doctor_local = doc;
+    }
+    public void initPatient(Patient pat){
+        field_nombre.setText(pat.getName());
+        field_apellidos.setText(pat.getSurname());
+        field_dni.setText(pat.getIdentifier());
+        field_telefono.setText(pat.getTelephon());
+        img.setImage(pat.getPhoto());
+        field_nombre.setEditable(false);
+        field_apellidos.setEditable(false);
+        field_dni.setEditable(false);
+        field_telefono.setEditable(false);
+        img.setDisable(false);
+    }
+    public void initDoctor(Doctor doc){
+        
     }
     
     

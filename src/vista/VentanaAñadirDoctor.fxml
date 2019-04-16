@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="322.0" prefWidth="738.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.VentanaAñadirController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="738.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.VentanaAñadirController">
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="11.0" layoutY="10.0" prefHeight="170.0" prefWidth="828.0" stylesheets="@estilo.css">
          <children>
@@ -62,7 +62,7 @@
             </VBox>
          </children>
       </HBox>
-      <HBox alignment="BOTTOM_RIGHT" layoutX="497.0" layoutY="270.0" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
+      <HBox alignment="BOTTOM_RIGHT" layoutX="499.0" layoutY="317.0" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Button id="btn" mnemonicParsing="false" onAction="#aceptar" styleClass="btnAceptar" stylesheets="@estilo.css" text="Aceptar">
                <HBox.margin>
@@ -79,7 +79,7 @@
             <Insets bottom="10.0" />
          </opaqueInsets>
       </HBox>
-      <HBox fx:id="hbox_days" alignment="CENTER" layoutX="14.0" layoutY="211.0" prefHeight="43.0" prefWidth="711.0" spacing="15.0">
+      <HBox fx:id="hbox_days" alignment="CENTER" layoutX="14.0" layoutY="256.0" prefHeight="43.0" prefWidth="711.0" spacing="15.0">
          <children>
             <VBox id="vboxDays" alignment="CENTER" onMouseClicked="#diasClicked" prefHeight="72.0" prefWidth="73.0" styleClass="vboxDays" stylesheets="@estilo.css">
                <children>
@@ -118,8 +118,16 @@
             </VBox>
          </children>
       </HBox>
-      <ComboBox fx:id="combo_consulta" layoutX="468.0" layoutY="159.0" prefHeight="26.0" prefWidth="238.0" promptText="Consulta" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
-      <ComboBox fx:id="combo_hora" layoutX="240.0" layoutY="159.0" prefHeight="26.0" prefWidth="82.0" promptText="00" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
-      <ComboBox fx:id="combo_min" layoutX="342.0" layoutY="159.0" prefHeight="26.0" prefWidth="82.0" promptText="00" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
+      <HBox alignment="CENTER" layoutX="8.0" layoutY="164.0" prefHeight="32.0" prefWidth="729.0" spacing="5.0">
+         <children>
+            <Label prefHeight="32.0" prefWidth="77.0" text="Hora inicio" />
+            <ComboBox fx:id="combo_hora" prefHeight="26.0" prefWidth="82.0" promptText="00" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
+            <ComboBox fx:id="combo_min" prefHeight="26.0" prefWidth="82.0" promptText="00" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
+            <Label prefHeight="32.0" prefWidth="69.0" text="Hora fin" />
+            <ComboBox fx:id="combo_hora1" prefHeight="26.0" prefWidth="82.0" promptText="00" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
+            <ComboBox fx:id="combo_min1" prefHeight="26.0" prefWidth="82.0" promptText="00" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
+         </children>
+      </HBox>
+      <ComboBox fx:id="combo_consulta" layoutX="227.0" layoutY="215.0" prefHeight="26.0" prefWidth="238.0" promptText="Consulta" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
    </children>
 </Pane>

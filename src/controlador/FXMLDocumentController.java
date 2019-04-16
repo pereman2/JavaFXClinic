@@ -235,6 +235,32 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    @FXML
+    private void visualizar(MouseEvent event) throws IOException {
+        switch(actual){
+            case DOCTOR:
+                Doctor aux_doctor = tabla_doctor.getSelectionModel().getSelectedItem();
+                             
+                break;
+                
+            case PATIENT:
+                Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
+                Stage stage = new Stage();
+                FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
+                Parent root = miLoader.load();
+                ((VentanaAñadirController) miLoader.getController()).initPatient(aux);
+                Scene scene = new Scene(root);
+                stage.setTitle("Visualizar paciente");
+                stage.setScene(scene);
+                stage.showAndWait();
+
+                
+                break;
+            case APPOINTMENT:
+                break;
+        }
+    }
+
 
     
 }
