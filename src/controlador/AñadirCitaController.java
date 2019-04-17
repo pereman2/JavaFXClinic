@@ -79,29 +79,37 @@ public class AñadirCitaController implements Initializable {
         database = FXMLDocumentController.getClinicDBAccess();
         doctores = database.getDoctors();
         pacientes = database.getPatients();
-        nombreDoctor.setPromptText("Nombre paciente");
-        nombrePaciente.setPromptText("Nombre Doctor");
+        nombreDoctor.setPromptText("Nombre doctor");
+        nombrePaciente.setPromptText("Nombre paciente");
     }    
 
     @FXML
-    private void mostrarPaciente(MouseEvent event) {        
-        infoPaciente.setVisible(true);
-        infoDoctor.setVisible(false);        
-        ObservableList<Patient> aux = FXCollections.observableArrayList(
-                                        filtrarPacientes(nombrePaciente.getText()));
-        
-        if (aux != null) {
-            infoPaciente.setItems(aux);
-            nomPaciente.setCellValueFactory(c -> 
-                    new ReadOnlyObjectWrapper(c.getValue().getName()));
-            apellidoPaciente.setCellValueFactory(c -> 
-                    new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+    private void mostrarPaciente(MouseEvent event) { 
+        Button btn = (Button) event.getSource();
+        if (btn.getText().equals("Modificar")) {
+            btn.setText("Buscar");
+            nombrePaciente.setEditable(true);
+            nombrePaciente.setText("");
+            infoPaciente.getItems().clear();
         }
         else {
-            Alert alerta = new Alert(AlertType.INFORMATION);
-            alerta.setTitle("Paciente no encontrado");
-            alerta.setHeaderText("No existen pacientes con ese nombre.");
-            alerta.show();
+            infoPaciente.setVisible(true);
+            infoDoctor.setVisible(false);        
+            ObservableList<Patient> aux = FXCollections.observableArrayList(
+                                            filtrarPacientes(nombrePaciente.getText()));        
+            if (aux != null) {
+                infoPaciente.setItems(aux);
+                nomPaciente.setCellValueFactory(c -> 
+                        new ReadOnlyObjectWrapper(c.getValue().getName()));
+                apellidoPaciente.setCellValueFactory(c -> 
+                        new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+            }
+            else {
+                Alert alerta = new Alert(AlertType.INFORMATION);
+                alerta.setTitle("Paciente no encontrado");
+                alerta.setHeaderText("No existen pacientes con ese nombre.");
+                alerta.show();
+            }
         }
     }
 
@@ -111,7 +119,8 @@ public class AñadirCitaController implements Initializable {
         if (btn.getText().equals("Modificar")) {
             btn.setText("Buscar");
             nombreDoctor.setEditable(true);
-            nombreDoctor.setText("");            
+            nombreDoctor.setText("");           
+            infoDoctor.getItems().clear();
         }
         else {
             infoDoctor.setVisible(true);
@@ -145,7 +154,7 @@ public class AñadirCitaController implements Initializable {
     }
     
     private ArrayList<Patient> filtrarPacientes(String nombre) {
-        ArrayList<Patient> aux = null;
+        ArrayList<Patient> aux = new ArrayList<Patient>();
         for (int i = 0; i < pacientes.size(); i++) {
             if (pacientes.get(i).getName().equals(nombre)) {
                 aux.add(pacientes.get(i));
@@ -173,6 +182,7 @@ public class AñadirCitaController implements Initializable {
             nombrePaciente.setEditable(false);
             btnPaciente.setText("Modificar");
         }       
-    }
+    }   
+    
     
 }
