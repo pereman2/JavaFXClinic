@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="446.0" prefWidth="427.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="vista.AñadirCitaController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="446.0" prefWidth="427.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controlador.AñadirCitaController">
    <children>
       <TextField fx:id="nombrePaciente" layoutX="28.0" layoutY="20.0" prefHeight="32.0" prefWidth="296.0" styleClass="textfields" stylesheets="@estilo.css" />
       <Button layoutX="334.0" layoutY="19.0" mnemonicParsing="false" onMouseClicked="#mostrarPaciente" styleClass="btnAceptar" stylesheets="@estilo.css" text="Buscar" />
