@@ -16,6 +16,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -59,6 +62,10 @@ public class AñadirCitaController implements Initializable {
     private TableColumn<Patient, String> nomPaciente;
     @FXML
     private TableColumn<Patient, String> apellidoPaciente;
+    @FXML
+    private Button btnPaciente;
+    @FXML
+    private Button btnDoctor;
     
     
 
@@ -82,24 +89,49 @@ public class AñadirCitaController implements Initializable {
         infoDoctor.setVisible(false);        
         ObservableList<Patient> aux = FXCollections.observableArrayList(
                                         filtrarPacientes(nombrePaciente.getText()));
-        infoPaciente.setItems(aux);
-        nomPaciente.setCellValueFactory(c -> 
-                new ReadOnlyObjectWrapper(c.getValue().getName()));
-        apellidoPaciente.setCellValueFactory(c -> 
-                new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+        
+        if (aux != null) {
+            infoPaciente.setItems(aux);
+            nomPaciente.setCellValueFactory(c -> 
+                    new ReadOnlyObjectWrapper(c.getValue().getName()));
+            apellidoPaciente.setCellValueFactory(c -> 
+                    new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+        }
+        else {
+            Alert alerta = new Alert(AlertType.INFORMATION);
+            alerta.setTitle("Paciente no encontrado");
+            alerta.setHeaderText("No existen pacientes con ese nombre.");
+            alerta.show();
+        }
     }
 
     @FXML
     private void mostrarDoctor(MouseEvent event) {
-        infoDoctor.setVisible(true);
-        infoPaciente.setVisible(false); 
-        ObservableList<Doctor> aux = FXCollections.observableArrayList(
-                                        filtrarDoctor(nombreDoctor.getText()));
-        infoDoctor.setItems(aux);
-        nomDoctor.setCellValueFactory(c -> 
-                new ReadOnlyObjectWrapper(c.getValue().getName()));
-        apellidoDoctor.setCellValueFactory(c -> 
-                new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+        Button btn = (Button) event.getSource();
+        if (btn.getText().equals("Modificar")) {
+            btn.setText("Buscar");
+            nombreDoctor.setEditable(true);
+            nombreDoctor.setText("");            
+        }
+        else {
+            infoDoctor.setVisible(true);
+            infoPaciente.setVisible(false); 
+            ObservableList<Doctor> aux = FXCollections.observableArrayList(
+                                            filtrarDoctor(nombreDoctor.getText()));
+            if (aux != null) { 
+                infoDoctor.setItems(aux);            
+                nomDoctor.setCellValueFactory(c -> 
+                        new ReadOnlyObjectWrapper(c.getValue().getName()));
+                apellidoDoctor.setCellValueFactory(c -> 
+                        new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+            }
+            else {
+                Alert alerta = new Alert(AlertType.INFORMATION);
+                alerta.setTitle("Doctor no encontrado");
+                alerta.setHeaderText("No existen doctores con ese nombre.");
+                alerta.show();
+            }
+        }
     }    
     
     private ArrayList<Doctor> filtrarDoctor(String nombre) {
@@ -129,18 +161,18 @@ public class AñadirCitaController implements Initializable {
             doctorSelecionado = 
                     (Doctor) aux.getSelectionModel().getSelectedItem();
             nombreDoctor.setText(doctorSelecionado.getName() + " " 
-                                     + doctorSelecionado.getSurname());            
-        }
-        
+                                     + doctorSelecionado.getSurname());
+            nombreDoctor.setEditable(false);
+            btnDoctor.setText("Modificar");            
+        }        
         else if (aux == infoPaciente) {
             pacienteSelecionado = 
                     (Patient) aux.getSelectionModel().getSelectedItem();
             nombrePaciente.setText(pacienteSelecionado.getName() + " " 
                                      + pacienteSelecionado.getSurname());
-        }
-        
-        
-        
+            nombrePaciente.setEditable(false);
+            btnPaciente.setText("Modificar");
+        }       
     }
     
 }
