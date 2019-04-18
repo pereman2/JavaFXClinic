@@ -163,7 +163,14 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void show_appointments(MouseEvent event) {
+    private void show_appointments(MouseEvent event) throws IOException{
+        Stage stg_citas = new Stage();
+        FXMLLoader loaderCitas = new FXMLLoader(getClass().getResource("/vista/AñadirCita.fxml"));
+        Parent root = loaderCitas.load();
+        Scene scnCitas = new Scene(root);
+        stg_citas.setTitle("Citas");
+        stg_citas.setScene(scnCitas);
+        stg_citas.showAndWait();
         actual = 3;
     }
 
@@ -179,8 +186,7 @@ public class FXMLDocumentController implements Initializable {
                 stage_doctor.setTitle("Añadir doctor");
                 stage_doctor.setScene(scene_doctor);
                 stage_doctor.showAndWait();
-                break;
-                
+                break;                
             case 2:
                 Stage stage = new Stage();
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
@@ -190,8 +196,7 @@ public class FXMLDocumentController implements Initializable {
                 stage.setTitle("Añadir paciente");
                 stage.setScene(scene);
                 stage.showAndWait();
-                break;
-                
+                break;                
             case 3:
                 break;
         }
