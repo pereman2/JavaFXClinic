@@ -5,39 +5,25 @@
  */
 package controlador;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
 import DBAccess.ClinicDBAccess;
-import controlador.FXMLDocumentController;
-import static controlador.FXMLDocumentController.pacientes;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Days;
 import model.Doctor;
 import model.ExaminationRoom;
 import model.Patient;
@@ -56,8 +42,7 @@ public class informacionController implements Initializable {
     
     
     private boolean isDoctor = false;
-    private boolean[] days;        
-    private String redBackground = "-fx-border-color: red;";
+    private boolean[] days;  
     private String vboxDaysBackground = "-fx-background-color: gray;" + 
                                         "-fx-border-radius: 50px;" + 
                                         "-fx-border-color: gray;" + 
@@ -92,6 +77,8 @@ public class informacionController implements Initializable {
     
     private ArrayList<ExaminationRoom> examination_rooms;
     
+    private ArrayList<VBox> vbox_Days;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         db = FXMLDocumentController.getClinicDBAccess();
@@ -105,9 +92,17 @@ public class informacionController implements Initializable {
                 getClass().getResource(
                 "/vista/VentanaAñadirDoctor.fxml")))) {
             days = new boolean[7];            
-        }        
+        } 
+        
+        
     }
     
+    @FXML
+    private void aceptar(ActionEvent event) { 
+        
+    }
+    
+    @FXML
     private void cancelar(ActionEvent event) {
         Stage stage = (Stage) (
                 (Node) event.getSource()).getScene().getWindow();
@@ -142,6 +137,7 @@ public class informacionController implements Initializable {
         combo_consulta.setPromptText(doc.getExaminationRoom().toString());
         combo_consulta.setEditable(false);
         initDoctor(doc);
+        seleccionarDays(doc);
     }
     
     private void initComboBox(Doctor doc) {
@@ -154,5 +150,46 @@ public class informacionController implements Initializable {
         combo_min.setPromptText(Integer.toString(horaInicial.getMinute()));
         combo_min1.setPromptText(Integer.toString(horaFinal.getMinute()));
     }
+    
+    private void getDays() {
+        vbox_Days = new ArrayList<VBox>();
+        for (Node v : hbox_days.getChildren()) {
+            vbox_Days.add((VBox) v);
+        }
+    }
+    
+    private void seleccionarDays(Doctor doc) {
+        getDays();
+        ArrayList<Days> aux = doc.getVisitDays();
+        for (int i = 0; i < aux.size(); i++) {
+            if(null != aux.get(i)) {
+                switch (aux.get(i)) {
+                    case Monday:
+                        vbox_Days.get(0).setStyle(vboxDaysBackground);
+                        break;
+                    case Tuesday:
+                        vbox_Days.get(1).setStyle(vboxDaysBackground);
+                        break;
+                    case Wednesday:
+                        vbox_Days.get(2).setStyle(vboxDaysBackground);
+                        break;
+                    case Thursday:
+                        vbox_Days.get(3).setStyle(vboxDaysBackground);
+                        break;
+                    case Friday:
+                        vbox_Days.get(4).setStyle(vboxDaysBackground);
+                        break;
+                    case Saturday:
+                        vbox_Days.get(5).setStyle(vboxDaysBackground);
+                        break;
+                    case Sunday:
+                        vbox_Days.get(6).setStyle(vboxDaysBackground);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         
+    }
 }

@@ -154,14 +154,47 @@ public class VentanaAñadirController implements Initializable {
     }
     
     //Devuelve el arraylist<Days> necesario para crear el doctor :)))
-    public ArrayList<Days> getDays() {
-        ArrayList<Days> res = new ArrayList<Days>();
-        Days[] aux = Days.values();
-        for(int i= 0; i < days.length; i++){
-            if(days[i]) res.add(aux[i]);
-        }
-        return res;
+    public ArrayList<Days> getDays() {        
+        ArrayList<Days> aux = new ArrayList<Days>();
+        for (Node v : hbox_days.getChildren()) {
+            VBox auxV = (VBox) v;
+            if (auxV.getStyle().equals(vboxDaysBackground)) {
+                switch (auxV.getId()) {
+                    case "0":
+                        aux.add(Days.Monday);
+                        break;
+                    case "1":
+                        aux.add(Days.Tuesday);
+                        break;
+                    case "2":
+                        aux.add(Days.Wednesday);
+                        break;
+                    case "3":
+                        aux.add(Days.Thursday);
+                        break;
+                    case "4":
+                        aux.add(Days.Friday);
+                        break;
+                    case "5":
+                        aux.add(Days.Saturday);
+                        break;
+                    case "6":
+                        aux.add(Days.Sunday);
+                        break;
+                }
+            }
+        } 
+        return aux;
     }
+    
+    private void initDays() {
+        for (int x = 0; x < hbox_days.getChildren().size(); x++) {
+            VBox aux = (VBox) hbox_days.getChildren().get(x);
+            aux.setId(Integer.toString(x));
+        }
+    }
+    
+    
 
     @FXML
     private void cancelar(ActionEvent event) {
@@ -182,17 +215,8 @@ public class VentanaAñadirController implements Initializable {
                     exploradorJPG.getSelectedFile().toURI().toString()));
         }
         hyperlink_img.setText("Cambiar imagen");
-    }
+    }    
     
-    private Days getDays(HBox hbox){
-        int i = 0;
-        for(Node v : hbox.getChildren()){
-            if(days[i] == true){
-            
-            }
-        }
-        return null;
-    }
     
     //Inicializa todos los comboBox del fxml doctor
     private void initComboBox() {        
@@ -209,19 +233,8 @@ public class VentanaAñadirController implements Initializable {
         for (int x = 0; x < examination_rooms.size(); x++) {
             combo_consulta.getItems().add(x, examination_rooms.get(x).getIdentNumber());
         }
-    }
-     
-    
-    //Obtiene los hbox añadiendo el como nombre la posicion del dia de la semana;
-    private void initDays() {  
-        ObservableList<Node> aux = hbox_days.getChildren();        
-        int pos = 0;        
-        while (pos < aux.size()) {
-            VBox v = (VBox) aux.get(pos);
-            v.setId(String.valueOf(pos));            
-            pos++;
-        }       
-    }
+    }    
+   
     //Comprueba si los datos introducidos son correctos.
     private boolean esCorrecto() {
         return (field_nombre.getStyle() != redBackground) &&
