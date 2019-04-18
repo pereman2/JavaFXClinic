@@ -106,9 +106,11 @@ public class FXMLDocumentController implements Initializable {
         col_nombre_doctor.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getName()));
         col_apellidos_doctor.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getSurname()));
     }
+    
     public static ArrayList<Patient> getPatients(){
         return pacientes;
     }
+    
     public void addPatient(Patient pat) {
         pacientes.add(pat);
     }
@@ -181,7 +183,7 @@ public class FXMLDocumentController implements Initializable {
                 Stage stage_doctor = new Stage();
                 FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirDoctor.fxml"));
                 Parent root_doctor = miLoader_doctor.load();
-                ((VentanaAñadirController) miLoader_doctor.getController()).initListaDoctor(datos_doc);
+                ((VentanaAñadirController) miLoader_doctor.getController()).initListaDoctor(datos_doc);                
                 Scene scene_doctor = new Scene(root_doctor);
                 stage_doctor.setTitle("Añadir doctor");
                 stage_doctor.setScene(scene_doctor);
@@ -192,7 +194,7 @@ public class FXMLDocumentController implements Initializable {
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
                 Parent root = miLoader.load();
                 ((VentanaAñadirController) miLoader.getController()).initListaPersona(datos_pat);
-                Scene scene = new Scene(root);
+                Scene scene = new Scene(root);                
                 stage.setTitle("Añadir paciente");
                 stage.setScene(scene);
                 stage.showAndWait();

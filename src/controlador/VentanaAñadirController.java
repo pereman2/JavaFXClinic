@@ -210,13 +210,7 @@ public class VentanaAñadirController implements Initializable {
             combo_consulta.getItems().add(x, examination_rooms.get(x).getIdentNumber());
         }
     }
-    
-    //Inicia la imagen.
-    private void initImage() {
-        Image aux = null; //extraure del la datebase
-        img.setImage(aux);
-        hyperlink_img.setText("Cambiar imagen");
-    } 
+     
     
     //Obtiene los hbox añadiendo el como nombre la posicion del dia de la semana;
     private void initDays() {  
@@ -277,8 +271,7 @@ public class VentanaAñadirController implements Initializable {
                 break;            
         }
         return res;
-    }
-    
+    }    
     
     //Inicializa las observable list del paciente y el doctor.
     public void initListaPersona(ObservableList<Patient> pat) {
@@ -286,21 +279,8 @@ public class VentanaAñadirController implements Initializable {
     }     
     public void initListaDoctor(ObservableList<Doctor> doc) {
         doctor_local = doc;
-    }
-    
-    
-    public void initPatient(Patient pat){
-        field_nombre.setText(pat.getName());
-        field_apellidos.setText(pat.getSurname());
-        field_dni.setText(pat.getIdentifier());
-        field_telefono.setText(pat.getTelephon());
-        img.setImage(pat.getPhoto());
-        field_nombre.setEditable(false);
-        field_apellidos.setEditable(false);
-        field_dni.setEditable(false);
-        field_telefono.setEditable(false);
-        img.setDisable(false);
-    }
+    }   
+  
     public void initDoctor(Doctor doc){
         
     }
@@ -327,5 +307,9 @@ public class VentanaAñadirController implements Initializable {
         String aux_style = ((VBox) e.getSource()).getStyle();
         return aux_style.matches(vboxDaysBackground);
     } 
+
+    void initPatient(Patient aux) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
