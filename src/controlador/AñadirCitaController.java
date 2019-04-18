@@ -80,7 +80,7 @@ public class AñadirCitaController implements Initializable {
         doctores = database.getDoctors();
         pacientes = database.getPatients();
         nombreDoctor.setPromptText("Nombre doctor");
-        nombrePaciente.setPromptText("Nombre paciente");
+        nombrePaciente.setPromptText("Nombre paciente");    
     }    
 
     @FXML

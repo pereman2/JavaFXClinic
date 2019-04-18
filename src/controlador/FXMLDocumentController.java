@@ -165,7 +165,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void show_appointments(MouseEvent event) throws IOException{
         Stage stg_citas = new Stage();
-        FXMLLoader loaderCitas = new FXMLLoader(getClass().getResource("/vista/AñadirCita.fxml"));
+        FXMLLoader loaderCitas = new FXMLLoader(getClass().getResource("/vista/AñadirCita2.fxml"));
         Parent root = loaderCitas.load();
         Scene scnCitas = new Scene(root);
         stg_citas.setTitle("Citas");
