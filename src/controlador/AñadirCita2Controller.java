@@ -8,6 +8,7 @@ package controlador;
 import DBAccess.ClinicDBAccess;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
@@ -24,7 +26,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import model.Appointment;
 import model.Days;
 import model.Doctor;
@@ -70,6 +74,10 @@ public class AñadirCita2Controller implements Initializable {
     private Text hora;
     @FXML
     private Text ok;
+    @FXML
+    private Button btn_aceptar;
+    @FXML
+    private Button btn_cancelar;
     /**
      * Initializes the controller class.
      */
@@ -332,5 +340,21 @@ public class AñadirCita2Controller implements Initializable {
         }
         
         return res;
+    }
+
+    @FXML
+    private void aceptar(MouseEvent event) {
+        int hora = combo_hora.getSelectionModel().getSelectedItem();
+        int min = combo_min.getSelectionModel().getSelectedItem();
+        LocalDate date = date_picker.getValue();
+        LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of(hora, min));
+        String str_pac = combo_paciente.getSelectionModel().getSelectedItem();
+        Patient pat = pacientes.get(current_pacientes.indexOf(str_pac));
+        Appointment aux = new Appointment(dateTime, doctor_actual, pat);
+        db.getAppointments().add(aux);
+    }
+
+    @FXML
+    private void cancelar(MouseEvent event) {
     }
 }

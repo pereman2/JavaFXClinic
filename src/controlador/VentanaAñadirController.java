@@ -73,7 +73,7 @@ public class VentanaAñadirController implements Initializable {
     private TextField field_apellidos;
     @FXML
     private TextField field_telefono;
-    ClinicDBAccess db;
+    private ClinicDBAccess db;
     @FXML
     private ComboBox<Integer> combo_consulta;
     @FXML
