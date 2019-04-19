@@ -132,9 +132,42 @@ public class AñadirCita2Controller implements Initializable {
         });
         combo_doctor.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             doctor_actual= doctores.get(current_doctores.indexOf(newValue));
+            hora.setText(doctor_actual.getVisitStartTime().toString() + doctor_actual.getVisitEndTime().toString());
+            update();
             
         });
         date_picker.promptTextProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        combo_min.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            
+            update();
+        });
+        combo_hora.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        
+    }
+    private void update(){
+        if(combo_min.getSelectionModel().getSelectedItem() != null &&
+                    combo_hora.getSelectionModel().getSelectedItem() != null &&
+                    date_picker.getValue() != null &&
+                    combo_doctor.getSelectionModel().getSelectedItem() != null){
+                    SlotWeek aux = slotMatch();
+                    LocalTime time1 = doctor_actual.getVisitStartTime();
+                    LocalTime time2 = doctor_actual.getVisitEndTime();
+                    LocalTime time3 = LocalTime.of(combo_hora.getSelectionModel().getSelectedItem(),
+                            combo_min.getSelectionModel().getSelectedItem());
+                    if(time3.compareTo(time1) >= 0 && time3.compareTo(time2) <= 0) {
+                        ok.setText(checkDisponible(aux));
+                    }
+                    else {
+                        ok.setText("Hora incorrecta");
+                    }
+                    
+            }
+    }
+    private SlotWeek slotMatch() {
             ArrayList<Days> visitDays = doctor_actual.getVisitDays();
             LocalTime visitStartTime = doctor_actual.getVisitStartTime();
             LocalTime visitEndTime = doctor_actual.getVisitEndTime();
@@ -142,30 +175,52 @@ public class AñadirCita2Controller implements Initializable {
             int semana = getDiaSemana(date);
             ArrayList<Appointment> appointments = db.getDoctorAppointments(doctor_actual.getIdentifier());
             semana_doctor = SlotAppointmentsWeek.getAppointmentsWeek(semana, visitDays, visitStartTime, visitEndTime, appointments);
-        });
-        combo_min.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             int hora = combo_hora.getSelectionModel().getSelectedItem();
             int min = combo_min.getSelectionModel().getSelectedItem();
-            if(combo_min.getSelectionModel().getSelectedItem() != null &&
-                    combo_hora.getSelectionModel().getSelectedItem() != null){
-                    for (int i = 0; i < semana_doctor.size(); i++) {
-                        checkSlot(semana_doctor.get(0).getSlot(), hora, min);
-                    }
-                    
+            SlotWeek res = null;
+            for (int i = 0; i < semana_doctor.size(); i++) {
+            SlotWeek aux = semana_doctor.get(i);
+            if(checkSlot(aux.getSlot(), hora, min)){
+                res = aux;
+                break;
             }
-        });
-        combo_hora.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(combo_min.getSelectionModel().getSelectedItem() != null &&
-                    combo_hora.getSelectionModel().getSelectedItem() != null){
-            }
-        });
-        
-    }
-    private String checkSlot(LocalTime date, int hora, int min){
-        if(date.getHour() == hora && date.getMinute() == min){
-            
         }
-        return null;
+        return res;
+    }
+    private String checkDisponible(SlotWeek slot){
+        int dia = date_picker.getValue().getDayOfWeek().getValue();
+        String str_dia = "";
+        switch(dia){
+            case 1:
+                str_dia = slot.getMondayAvailability();
+                break;
+            case 2:
+                str_dia = slot.getTuesdayAvailability();
+                break;
+            case 3:
+                str_dia = slot.getWednesdayAvailability();
+                break;
+            case 4:
+                str_dia = slot.getThursdayAvailability();
+                break;
+            case 5:
+                str_dia = slot.getFridayAvailability();
+                break;
+            case 6:
+                str_dia = slot.getSaturdayAvailability();
+                break;
+            case 7:
+                str_dia = slot.getSundayAvailability();
+                break;
+        }
+        return str_dia;
+    }
+    private boolean checkSlot(LocalTime date, int hora, int min){
+        boolean res = false;
+        if(date.getHour() == hora && date.getMinute() == min){
+            res = true;
+        }
+        return res;
     }
     
     private int getDiaSemana(LocalDate date){
