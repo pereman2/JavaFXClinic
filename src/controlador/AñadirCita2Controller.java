@@ -7,7 +7,11 @@ package controlador;
 
 import DBAccess.ClinicDBAccess;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,14 +19,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
+import javafx.scene.text.Text;
 import model.Appointment;
 import model.Days;
 import model.Doctor;
 import model.Patient;
+import utils.SlotAppointmentsWeek;
+import utils.SlotWeek;
 
 /**
  * FXML Controller class
@@ -31,8 +39,6 @@ import model.Patient;
  */
 public class AñadirCita2Controller implements Initializable {
 
-    @FXML
-    private TableView<Days> tabla;
     @FXML
     private TextField field_paciente;
     @FXML
@@ -56,7 +62,14 @@ public class AñadirCita2Controller implements Initializable {
     private ArrayList<String> current_pacientes;
     private ArrayList<Doctor> doctores;
     private ArrayList<String> current_doctores;
-    
+    private ArrayList<SlotWeek> semana_doctor;
+    private Doctor doctor_actual;
+    @FXML
+    private ListView<?> lista;
+    @FXML
+    private Text hora;
+    @FXML
+    private Text ok;
     /**
      * Initializes the controller class.
      */
@@ -70,6 +83,8 @@ public class AñadirCita2Controller implements Initializable {
         doctores = db.getDoctors();
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
+        doctor_actual = null;
+        date_picker.setShowWeekNumbers(true);
         
         //inits
         initCurrent();
@@ -115,6 +130,55 @@ public class AñadirCita2Controller implements Initializable {
             combo_doctor.getItems().clear();
             combo_doctor.getItems().addAll(lista);
         });
+        combo_doctor.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            doctor_actual= doctores.get(current_doctores.indexOf(newValue));
+            
+        });
+        date_picker.promptTextProperty().addListener((observable, oldValue, newValue) -> {
+            ArrayList<Days> visitDays = doctor_actual.getVisitDays();
+            LocalTime visitStartTime = doctor_actual.getVisitStartTime();
+            LocalTime visitEndTime = doctor_actual.getVisitEndTime();
+            LocalDate date = date_picker.getValue();
+            int semana = getDiaSemana(date);
+            ArrayList<Appointment> appointments = db.getDoctorAppointments(doctor_actual.getIdentifier());
+            semana_doctor = SlotAppointmentsWeek.getAppointmentsWeek(semana, visitDays, visitStartTime, visitEndTime, appointments);
+        });
+        combo_min.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            int hora = combo_hora.getSelectionModel().getSelectedItem();
+            int min = combo_min.getSelectionModel().getSelectedItem();
+            if(combo_min.getSelectionModel().getSelectedItem() != null &&
+                    combo_hora.getSelectionModel().getSelectedItem() != null){
+                    for (int i = 0; i < semana_doctor.size(); i++) {
+                        checkSlot(semana_doctor.get(0).getSlot(), hora, min);
+                    }
+                    
+            }
+        });
+        combo_hora.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(combo_min.getSelectionModel().getSelectedItem() != null &&
+                    combo_hora.getSelectionModel().getSelectedItem() != null){
+            }
+        });
+        
+    }
+    private String checkSlot(LocalTime date, int hora, int min){
+        if(date.getHour() == hora && date.getMinute() == min){
+            
+        }
+        return null;
+    }
+    
+    private int getDiaSemana(LocalDate date){
+        int dayYear = date.getDayOfYear();
+        int dayWeek = date.getDayOfWeek().getValue();
+        LocalDate first = LocalDate.of(date.getYear(), 1, 1);
+        int dayWeekFirst = first.getDayOfWeek().getValue();
+        int numWeek = (dayYear + 6) / 7;
+        
+        if(dayWeek < dayWeekFirst){
+            ++numWeek;
+        }
+        return numWeek;
     }
     
     private void initComboBox(){
@@ -146,15 +210,20 @@ public class AñadirCita2Controller implements Initializable {
             current_doctores.add(aux_doc.getName() + " " + aux_doc.getSurname());
         }
     }
+    
+    
+    //dado el agente(cliente/doctor) y string devuelve la lista filtrada
     private ArrayList<String> filtrar(int agente, String newValue) throws StringIndexOutOfBoundsException{
-        System.out.println(newValue);
         ArrayList<String> res = new ArrayList<>();
         if(agente == DOCTOR){
             ArrayList<String> aux_doctores = current_doctores;
+            //lowercase string para facilitar las comparaciones
             String texto_doctor = newValue.toLowerCase();
+            //caso texto vacio
             if(texto_doctor.equals("")){
                res = current_doctores; 
             }
+            //caso texto solo tiene una letra
             else if(texto_doctor.length() == 1){
                 for(int i = 0; i < aux_doctores.size(); i++){
                     String doc = aux_doctores.get(i).toLowerCase();
@@ -163,13 +232,12 @@ public class AñadirCita2Controller implements Initializable {
                     }
                 }
             }
+            //caso global
             else {
                 for(int i = 0; i < aux_doctores.size(); i++){
                     String doc = aux_doctores.get(i);
-                    System.out.println(doc.toLowerCase());
                     if(texto_doctor.length() <= doc.length()){
                         String sub = doc.toLowerCase().substring(0, texto_doctor.length());
-                        System.out.println(sub);
                         if(sub.equals(texto_doctor)){
                             res.add(doc);
                         }
@@ -196,10 +264,8 @@ public class AñadirCita2Controller implements Initializable {
             else{
                 for(int i = 0; i < aux_pacientes.size(); i++){
                     String pac = aux_pacientes.get(i);
-                    System.out.println(pac.toLowerCase());
                     if(texto_paciente.length() <= pac.length()){
                         String sub = pac.toLowerCase().substring(0, texto_paciente.length());
-                        System.out.println(sub);
                         if(sub.equals(texto_paciente)){
                             res.add(pac);
                         }
