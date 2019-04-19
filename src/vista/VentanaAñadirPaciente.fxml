@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="463.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.VentanaAñadirController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="463.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.informacionController">
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="11.0" layoutY="10.0" prefHeight="242.0" prefWidth="706.0" stylesheets="@estilo.css">
          <children>
@@ -55,12 +55,12 @@
       </HBox>
       <HBox alignment="BOTTOM_RIGHT" layoutX="249.0" layoutY="252.0" prefHeight="45.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Button id="btn" mnemonicParsing="false" onAction="#aceptar" styleClass="btnAceptar" stylesheets="@estilo.css" text="Aceptar">
+            <Button id="btn" fx:id="button_aceptar" mnemonicParsing="false" onAction="#aceptar" styleClass="btnAceptar" stylesheets="@estilo.css" text="Aceptar">
                <HBox.margin>
                   <Insets bottom="10.0" />
                </HBox.margin>
             </Button>
-            <Button id="btn" mnemonicParsing="false" onAction="#cancelar" styleClass="btnCancelar" stylesheets="@estilo.css" text="Cancelar">
+            <Button id="btn" fx:id="button_cancelar" mnemonicParsing="false" onAction="#cancelar" styleClass="btnCancelar" stylesheets="@estilo.css" text="Cancelar">
                <HBox.margin>
                   <Insets bottom="10.0" />
                </HBox.margin>

@@ -16,10 +16,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -78,23 +81,14 @@ public class informacionController implements Initializable {
     private ArrayList<ExaminationRoom> examination_rooms;
     
     private ArrayList<VBox> vbox_Days;
+    @FXML
+    private Button button_aceptar;
+    @FXML
+    private Button button_cancelar;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        db = FXMLDocumentController.getClinicDBAccess();
-        examination_rooms = db.getExaminationRooms();
-        field_nombre.setPromptText("Nombre");
-        field_apellidos.setPromptText("Apellidos");
-        field_dni.setPromptText("DNI");
-        field_telefono.setPromptText("Telefono");
-        FXMLLoader fmxl = new FXMLLoader(url);
-        if (fmxl.equals(new FXMLLoader(
-                getClass().getResource(
-                "/vista/VentanaAñadirDoctor.fxml")))) {
-            days = new boolean[7];            
-        } 
-        
-        
+    public void initialize(URL url, ResourceBundle rb) {              
+            
     }
     
     @FXML
@@ -110,7 +104,7 @@ public class informacionController implements Initializable {
     }
     
     //Mostrar pacientes
-    public void initPatient(Patient pat){
+    public void initPatient(Patient pat){        
         field_nombre.setText(pat.getName());
         field_apellidos.setText(pat.getSurname());
         field_dni.setText(pat.getIdentifier());
@@ -134,9 +128,9 @@ public class informacionController implements Initializable {
         field_dni.setEditable(false);
         field_telefono.setEditable(false);
         img.setDisable(false);
-        combo_consulta.setPromptText(doc.getExaminationRoom().toString());
+ //       combo_consulta.setPromptText(doc.getExaminationRoom().toString());
         combo_consulta.setEditable(false);
-        initDoctor(doc);
+        initComboBox(doc);
         seleccionarDays(doc);
     }
     
@@ -192,4 +186,17 @@ public class informacionController implements Initializable {
         }
         
     }
+
+    @FXML
+    private void cambiarImagen(ActionEvent event) {
+    }
+
+    @FXML
+    private void colorFondoCaracter(KeyEvent event) {
+    }
+
+    @FXML
+    private void diasClicked(MouseEvent event) {
+    }
+
 }

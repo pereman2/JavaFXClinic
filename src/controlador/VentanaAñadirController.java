@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -87,6 +88,10 @@ public class VentanaAñadirController implements Initializable {
     private ComboBox<Integer> combo_min1;
     
     private ArrayList<ExaminationRoom> examination_rooms;
+    @FXML
+    private Button button_aceptar;
+    @FXML
+    private Button button_cancelar;
     /**
      * Initializes the controller class.
      */
@@ -120,22 +125,25 @@ public class VentanaAñadirController implements Initializable {
             Image photo = img.getImage();
             if (isDoctor) {            
                 Doctor aux = new Doctor();
-                aux.setName(field_nombre.getText());
-                aux.setSurname(aux.getSurname());
-                aux.setTelephon(aux.getTelephon());
-                aux.setIdentifier(field_dni.getText());
+                aux.setName(name);
+                aux.setSurname(surname);
+                aux.setTelephon(telephon);
+                aux.setIdentifier(identifier);
                 aux.setVisitDays(getDays());
-                aux.setExaminationRoom(examination_rooms.get(
-                                        combo_consulta.getSelectionModel().getSelectedItem()));
-                LocalTime lt1 = LocalTime.of(combo_hora.getSelectionModel().getSelectedItem(),
-                                            combo_min.getSelectionModel().getSelectedItem());
+//                aux.setExaminationRoom(examination_rooms.get(
+//                                        combo_consulta.getSelectionModel().getSelectedItem().intValue()));
+                LocalTime lt1 = LocalTime.of(combo_hora.getSelectionModel().getSelectedItem().intValue(),
+                                            combo_min.getSelectionModel().getSelectedItem().intValue());
                 aux.setVisitStartTime(lt1);
-                LocalTime lt2 = LocalTime.of(combo_hora1.getSelectionModel().getSelectedItem(),
-                                            combo_min1.getSelectionModel().getSelectedItem());
+                LocalTime lt2 = LocalTime.of(combo_hora1.getSelectionModel().getSelectedItem().intValue(),
+                                            combo_min1.getSelectionModel().getSelectedItem().intValue());
+                aux.setVisitEndTime(lt2);
+                aux.setVisitDays(getDays());
                 
                 
                 db.getDoctors().add(aux);
                 doctor_local.add(aux);
+                FXMLDocumentController.getClinicDBAccess().getDoctors().add(aux);
                 ((Stage) img.getScene().getWindow()).close();               
             }
             else {                
@@ -161,7 +169,7 @@ public class VentanaAñadirController implements Initializable {
             if (auxV.getStyle().equals(vboxDaysBackground)) {
                 switch (auxV.getId()) {
                     case "0":
-                        aux.add(Days.Monday);
+                        aux.add(Days.Monday);                       
                         break;
                     case "1":
                         aux.add(Days.Tuesday);
@@ -182,6 +190,7 @@ public class VentanaAñadirController implements Initializable {
                         aux.add(Days.Sunday);
                         break;
                 }
+                
             }
         } 
         return aux;
@@ -220,7 +229,7 @@ public class VentanaAñadirController implements Initializable {
     
     //Inicializa todos los comboBox del fxml doctor
     private void initComboBox() {        
-        for (int x = 0; x <= 24; x++) {
+        for (int x = 0; x <= 23; x++) {
             combo_hora.getItems().add(x,x);
             combo_hora1.getItems().add(x,x);
         }
@@ -237,6 +246,20 @@ public class VentanaAñadirController implements Initializable {
    
     //Comprueba si los datos introducidos son correctos.
     private boolean esCorrecto() {
+        if(FXMLDocumentController.actual == 1){
+            Integer prueba = combo_hora.getSelectionModel().getSelectedItem();
+            return (field_nombre.getStyle() != redBackground) &&
+                (field_apellidos.getStyle() != redBackground) &&
+                (field_dni.getStyle() != redBackground) &&
+                (field_telefono.getStyle() != redBackground) &&
+                (combo_hora.getSelectionModel().getSelectedItem() != null)&&
+                (combo_min.getSelectionModel().getSelectedItem() != null) &&
+                (combo_hora1.getSelectionModel().getSelectedItem() != null) &&
+                (combo_min1.getSelectionModel().getSelectedItem() != null) &&
+                // cambiar a != quan ja no es fagen proves    
+                (combo_consulta.getSelectionModel().getSelectedItem() == null) && 
+                hayDiasSeleccionados();
+        }
         return (field_nombre.getStyle() != redBackground) &&
                 (field_apellidos.getStyle() != redBackground) &&
                 (field_dni.getStyle() != redBackground) &&
@@ -268,6 +291,17 @@ public class VentanaAñadirController implements Initializable {
         }
     }
     
+    private boolean hayDiasSeleccionados() {
+        boolean aux = false;
+        for (Node v : hbox_days.getChildren()) {
+            VBox auxV = (VBox) v;
+            if (auxV.getStyle().equals(vboxDaysBackground)) {
+                aux = true;
+            }
+        }
+        return aux;
+    }
+    
     //Conjunto de caracteres o cadenas aceptadas en el 
     //textField segun el tipo
     private boolean caracteresCompatibles (String cadena, int tipo) { 
@@ -295,7 +329,37 @@ public class VentanaAñadirController implements Initializable {
     }   
   
     public void initDoctor(Doctor doc){
+        //fields
+        field_nombre.setText(doc.getName());
+        field_apellidos.setText(doc.getSurname());
+        field_dni.setText(doc.getIdentifier());
+        field_telefono.setText(doc.getTelephon());
+        img.setImage(doc.getPhoto());
+        combo_hora.getSelectionModel().select(doc.getVisitStartTime().getHour());
+        combo_min.getSelectionModel().select(doc.getVisitStartTime().getMinute() / 15);
+        combo_hora1.getSelectionModel().select(doc.getVisitEndTime().getHour());
+        combo_min1.getSelectionModel().select(doc.getVisitEndTime().getMinute() / 15);
+        combo_consulta.getSelectionModel().select(doc.getExaminationRoom().getIdentNumber());
+        ArrayList<Days> aux_days = doc.getVisitDays();
+        //visualizar_dias(aux_days);
         
+        //editable
+        field_nombre.setEditable(false);
+        field_apellidos.setDisable(false);
+        field_dni.setEditable(false);
+        field_telefono.setEditable(false);
+        combo_hora.setDisable(true);
+        combo_hora1.setDisable(true);
+        combo_min.setDisable(true);
+        combo_min1.setDisable(true);
+        combo_consulta.setDisable(true);
+        
+        button_aceptar.setDisable(true);
+        button_aceptar.setVisible(false);
+        button_cancelar.setText("Salir");
+        
+        
+        img.setDisable(true);
     }
     
     
