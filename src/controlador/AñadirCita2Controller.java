@@ -102,19 +102,17 @@ public class AñadirCita2Controller implements Initializable {
     }
     private void initListeners(){
         field_paciente.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            ArrayList<String> lista = filtrar(PATIENT);
+            ArrayList<String> lista = filtrar(PATIENT, newValue);
             
-            combo_paciente.getItems().remove(0, 
-                                            combo_paciente.getItems().size() - 1);
+            combo_paciente.getItems().clear();
             combo_paciente.getItems().addAll(lista);
             
             
         });
         field_doctor.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            ArrayList<String> lista = filtrar(DOCTOR);
+            ArrayList<String> lista = filtrar(DOCTOR, newValue);
             
-            combo_doctor.getItems().remove(0, 
-                                            combo_doctor.getItems().size() - 1);
+            combo_doctor.getItems().clear();
             combo_doctor.getItems().addAll(lista);
         });
     }
@@ -148,27 +146,68 @@ public class AñadirCita2Controller implements Initializable {
             current_doctores.add(aux_doc.getName() + " " + aux_doc.getSurname());
         }
     }
-    private ArrayList<String> filtrar(int agente){
+    private ArrayList<String> filtrar(int agente, String newValue) throws StringIndexOutOfBoundsException{
+        System.out.println(newValue);
         ArrayList<String> res = new ArrayList<>();
         if(agente == DOCTOR){
             ArrayList<String> aux_doctores = current_doctores;
-            String texto_doctor = field_doctor.getText();
-            for(int i = 0; i < aux_doctores.size(); i++){
-                String doc = aux_doctores.get(i);
-                if(texto_doctor.equals(doc.substring(0, texto_doctor.length() - 1))){
-                    res.add(doc);
+            String texto_doctor = newValue.toLowerCase();
+            if(texto_doctor.equals("")){
+               res = current_doctores; 
+            }
+            else if(texto_doctor.length() == 1){
+                for(int i = 0; i < aux_doctores.size(); i++){
+                    String doc = aux_doctores.get(i).toLowerCase();
+                    if(doc.startsWith(texto_doctor)){
+                        res.add(doc);
+                    }
                 }
             }
+            else {
+                for(int i = 0; i < aux_doctores.size(); i++){
+                    String doc = aux_doctores.get(i);
+                    System.out.println(doc.toLowerCase());
+                    if(texto_doctor.length() <= doc.length()){
+                        String sub = doc.toLowerCase().substring(0, texto_doctor.length());
+                        System.out.println(sub);
+                        if(sub.equals(texto_doctor)){
+                            res.add(doc);
+                        }
+                    }
+                    
+                }
+            }
+            
         }
         else {
             ArrayList<String> aux_pacientes = current_pacientes;
-            String texto_paciente = field_paciente.getText();
-            for(int i = 0; i < aux_pacientes.size(); i++){
-                String pac = aux_pacientes.get(i);
-                if(texto_paciente.equals(pac.substring(0, texto_paciente.length() - 1))){
-                    res.add(pac);
+            String texto_paciente = newValue;
+            if(texto_paciente.equals("")){
+                res = current_pacientes;
+            }
+            else if(texto_paciente.length() == 1){
+                for(int i = 0; i < aux_pacientes.size(); i++){
+                    String pac = aux_pacientes.get(i).toLowerCase();
+                    if(pac.startsWith(texto_paciente)){
+                        res.add(pac);
+                    }
                 }
             }
+            else{
+                for(int i = 0; i < aux_pacientes.size(); i++){
+                    String pac = aux_pacientes.get(i);
+                    System.out.println(pac.toLowerCase());
+                    if(texto_paciente.length() <= pac.length()){
+                        String sub = pac.toLowerCase().substring(0, texto_paciente.length());
+                        System.out.println(sub);
+                        if(sub.equals(texto_paciente)){
+                            res.add(pac);
+                        }
+                    }
+                    
+                }
+            }
+            
         }
         
         return res;
