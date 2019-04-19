@@ -182,7 +182,6 @@ public class AñadirCitaController implements Initializable {
             nombrePaciente.setEditable(false);
             btnPaciente.setText("Modificar");
         }       
-    }   
-    
+    }    
     
 }

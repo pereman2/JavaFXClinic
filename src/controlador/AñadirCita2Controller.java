@@ -6,6 +6,7 @@
 package controlador;
 
 import DBAccess.ClinicDBAccess;
+import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -27,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import model.Appointment;
@@ -51,7 +54,7 @@ public class AñadirCita2Controller implements Initializable {
     private ComboBox<String> combo_paciente;
     @FXML
     private ComboBox<String> combo_doctor;
-    @FXML
+   
     private DatePicker date_picker;
     @FXML
     private ComboBox<Integer> combo_hora;
@@ -68,12 +71,10 @@ public class AñadirCita2Controller implements Initializable {
     private ArrayList<String> current_doctores;
     private ArrayList<SlotWeek> semana_doctor;
     private Doctor doctor_actual;
-    @FXML
-    private ListView<?> lista;
-    @FXML
     private Text hora;
-    @FXML
     private Text ok;
+    @FXML
+    private HBox hbox_picker;
     @FXML
     private Button btn_aceptar;
     @FXML
@@ -82,17 +83,18 @@ public class AñadirCita2Controller implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        /*TableColumn<Days, String> x = new TableColumn<>();
-        x.setText("xdd");
-        tabla.getColumns().add(x);*/
+    public void initialize(URL url, ResourceBundle rb) {        
         db = FXMLDocumentController.getClinicDBAccess();
         pacientes = db.getPatients();
         doctores = db.getDoctors();
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
-        doctor_actual = null;
+        doctor_actual = null;       
+        date_picker = new DatePicker();
         date_picker.setShowWeekNumbers(true);
+        DatePickerSkin saux = new DatePickerSkin(date_picker);
+        hbox_picker.getChildren().add(saux.getPopupContent());
+        
         
         //inits
         initCurrent();
@@ -289,8 +291,8 @@ public class AñadirCita2Controller implements Initializable {
             //caso texto solo tiene una letra
             else if(texto_doctor.length() == 1){
                 for(int i = 0; i < aux_doctores.size(); i++){
-                    String doc = aux_doctores.get(i).toLowerCase();
-                    if(doc.startsWith(texto_doctor)){
+                    String doc = aux_doctores.get(i);
+                    if(doc.toLowerCase().startsWith(texto_doctor)){
                         res.add(doc);
                     }
                 }
@@ -318,8 +320,8 @@ public class AñadirCita2Controller implements Initializable {
             }
             else if(texto_paciente.length() == 1){
                 for(int i = 0; i < aux_pacientes.size(); i++){
-                    String pac = aux_pacientes.get(i).toLowerCase();
-                    if(pac.startsWith(texto_paciente)){
+                    String pac = aux_pacientes.get(i);
+                    if(pac.toLowerCase().startsWith(texto_paciente)){
                         res.add(pac);
                     }
                 }

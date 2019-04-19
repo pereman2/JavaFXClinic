@@ -125,23 +125,25 @@ public class VentanaAñadirController implements Initializable {
             Image photo = img.getImage();
             if (isDoctor) {            
                 Doctor aux = new Doctor();
-                aux.setName(field_nombre.getText());
-                aux.setSurname(field_apellidos.getText());
-                aux.setTelephon(field_telefono.getText());
-                aux.setIdentifier(field_dni.getText());
+                aux.setName(name);
+                aux.setSurname(surname);
+                aux.setTelephon(telephon);
+                aux.setIdentifier(identifier);
                 aux.setVisitDays(getDays());
-                aux.setExaminationRoom(examination_rooms.get(
-                                        combo_consulta.getSelectionModel().getSelectedItem().intValue()));
+//                aux.setExaminationRoom(examination_rooms.get(
+//                                        combo_consulta.getSelectionModel().getSelectedItem().intValue()));
                 LocalTime lt1 = LocalTime.of(combo_hora.getSelectionModel().getSelectedItem().intValue(),
                                             combo_min.getSelectionModel().getSelectedItem().intValue());
                 aux.setVisitStartTime(lt1);
                 LocalTime lt2 = LocalTime.of(combo_hora1.getSelectionModel().getSelectedItem().intValue(),
                                             combo_min1.getSelectionModel().getSelectedItem().intValue());
                 aux.setVisitEndTime(lt2);
+                aux.setVisitDays(getDays());
                 
                 
                 db.getDoctors().add(aux);
                 doctor_local.add(aux);
+                FXMLDocumentController.getClinicDBAccess().getDoctors().add(aux);
                 ((Stage) img.getScene().getWindow()).close();               
             }
             else {                
@@ -160,15 +162,48 @@ public class VentanaAñadirController implements Initializable {
     }
     
     //Devuelve el arraylist<Days> necesario para crear el doctor :)))
-    public ArrayList<Days> getDays() {
-        ArrayList<Days> res = new ArrayList<Days>();
-        //au == todos los dias de la semana
-        Days[] aux = Days.values();
-        for(int i= 0; i < days.length; i++){
-            if(days[i]) res.add(aux[i]);
-        }
-        return res;
+    public ArrayList<Days> getDays() {        
+        ArrayList<Days> aux = new ArrayList<Days>();
+        for (Node v : hbox_days.getChildren()) {
+            VBox auxV = (VBox) v;
+            if (auxV.getStyle().equals(vboxDaysBackground)) {
+                switch (auxV.getId()) {
+                    case "0":
+                        aux.add(Days.Monday);                       
+                        break;
+                    case "1":
+                        aux.add(Days.Tuesday);
+                        break;
+                    case "2":
+                        aux.add(Days.Wednesday);
+                        break;
+                    case "3":
+                        aux.add(Days.Thursday);
+                        break;
+                    case "4":
+                        aux.add(Days.Friday);
+                        break;
+                    case "5":
+                        aux.add(Days.Saturday);
+                        break;
+                    case "6":
+                        aux.add(Days.Sunday);
+                        break;
+                }
+                
+            }
+        } 
+        return aux;
     }
+    
+    private void initDays() {
+        for (int x = 0; x < hbox_days.getChildren().size(); x++) {
+            VBox aux = (VBox) hbox_days.getChildren().get(x);
+            aux.setId(Integer.toString(x));
+        }
+    }
+    
+    
 
     @FXML
     private void cancelar(ActionEvent event) {
@@ -189,17 +224,8 @@ public class VentanaAñadirController implements Initializable {
                     exploradorJPG.getSelectedFile().toURI().toString()));
         }
         hyperlink_img.setText("Cambiar imagen");
-    }
+    }    
     
-    private Days getDays(HBox hbox){
-        int i = 0;
-        for(Node v : hbox.getChildren()){
-            if(days[i] == true){
-            
-            }
-        }
-        return null;
-    }
     
     //Inicializa todos los comboBox del fxml doctor
     private void initComboBox() {        
@@ -216,47 +242,23 @@ public class VentanaAñadirController implements Initializable {
         for (int x = 0; x < examination_rooms.size(); x++) {
             combo_consulta.getItems().add(x, examination_rooms.get(x).getIdentNumber());
         }
-    }
-    
-    //Inicia la imagen.
-    private void initImage() {
-        Image aux = null; //extraure del la datebase
-        img.setImage(aux);
-        hyperlink_img.setText("Cambiar imagen");
-    } 
-    
-    //Obtiene los hbox añadiendo el como nombre la posicion del dia de la semana;
-    private void initDays() {  
-        ObservableList<Node> aux = hbox_days.getChildren();        
-        int pos = 0;        
-        while (pos < aux.size()) {
-            VBox v = (VBox) aux.get(pos);
-            v.setId(String.valueOf(pos));            
-            pos++;
-        }       
-    }
-    private boolean hayDiasSeleccionados(){
-        int i = 0;
-        while(i < days.length && !days[i] ){
-            i++;
-        } 
-        
-        
-        return i >= days.length;
-    }             
+    }    
+   
+    //Comprueba si los datos introducidos son correctos.
     private boolean esCorrecto() {
         if(FXMLDocumentController.actual == 1){
             Integer prueba = combo_hora.getSelectionModel().getSelectedItem();
             return (field_nombre.getStyle() != redBackground) &&
                 (field_apellidos.getStyle() != redBackground) &&
                 (field_dni.getStyle() != redBackground) &&
-                (field_telefono.getStyle() != redBackground)&&
+                (field_telefono.getStyle() != redBackground) &&
                 (combo_hora.getSelectionModel().getSelectedItem() != null)&&
-                (combo_min.getSelectionModel().getSelectedItem() != null)&&
-                (combo_hora1.getSelectionModel().getSelectedItem() != null)&&
-                (combo_min1.getSelectionModel().getSelectedItem() != null)&&
-                (combo_consulta.getSelectionModel().getSelectedItem() != null)&&
-                (!hayDiasSeleccionados());
+                (combo_min.getSelectionModel().getSelectedItem() != null) &&
+                (combo_hora1.getSelectionModel().getSelectedItem() != null) &&
+                (combo_min1.getSelectionModel().getSelectedItem() != null) &&
+                // cambiar a != quan ja no es fagen proves    
+                (combo_consulta.getSelectionModel().getSelectedItem() == null) && 
+                hayDiasSeleccionados();
         }
         return (field_nombre.getStyle() != redBackground) &&
                 (field_apellidos.getStyle() != redBackground) &&
@@ -289,6 +291,17 @@ public class VentanaAñadirController implements Initializable {
         }
     }
     
+    private boolean hayDiasSeleccionados() {
+        boolean aux = false;
+        for (Node v : hbox_days.getChildren()) {
+            VBox auxV = (VBox) v;
+            if (auxV.getStyle().equals(vboxDaysBackground)) {
+                aux = true;
+            }
+        }
+        return aux;
+    }
+    
     //Conjunto de caracteres o cadenas aceptadas en el 
     //textField segun el tipo
     private boolean caracteresCompatibles (String cadena, int tipo) { 
@@ -305,8 +318,7 @@ public class VentanaAñadirController implements Initializable {
                 break;            
         }
         return res;
-    }
-    
+    }    
     
     //Inicializa las observable list del paciente y el doctor.
     public void initListaPersona(ObservableList<Patient> pat) {
@@ -314,64 +326,8 @@ public class VentanaAñadirController implements Initializable {
     }     
     public void initListaDoctor(ObservableList<Doctor> doc) {
         doctor_local = doc;
-    }
-    
-    
-    public void initPatient(Patient pat){
-        //fields
-        field_nombre.setText(pat.getName());
-        field_apellidos.setText(pat.getSurname());
-        field_dni.setText(pat.getIdentifier());
-        field_telefono.setText(pat.getTelephon());
-        img.setImage(pat.getPhoto());
-        
-        
-        //editable
-        field_nombre.setEditable(false);
-        field_apellidos.setEditable(false);
-        field_dni.setEditable(false);
-        field_telefono.setEditable(false);
-        img.setDisable(false);
-        button_aceptar.setDisable(true);
-        button_aceptar.setVisible(false);
-        button_cancelar.setText("Salir");
-    }
-    public void visualizar_dias(ArrayList<Days> d){
-        for(int i = 0; i < d.size(); i++){
-            switch(d.get(i)){
-                case Monday:
-                    days[0] = true;
-                    break;
-                case Tuesday:
-                    days[1] = true;
-                    break;
-                case Wednesday:
-                    days[2] = true;
-                    break;
-                case Thursday:
-                    days[3] = true;
-                    break;
-                case Friday:
-                    days[4] = true;
-                    break;
-                case Saturday:
-                    days[5] = true;
-                    break;
-                case Sunday:
-                    days[6] = true;
-                    break;
-            
-            }
-        }
-        for(int i = 0; i < days.length; i++){
-            VBox dia = (VBox) hbox_days.getChildren().get(i);
-            dia.setDisable(true);
-            if(days[i]){
-                dia.setStyle(vboxDaysBackground);
-            }
-            
-        }
-    }
+    }   
+  
     public void initDoctor(Doctor doc){
         //fields
         field_nombre.setText(doc.getName());
@@ -385,7 +341,7 @@ public class VentanaAñadirController implements Initializable {
         combo_min1.getSelectionModel().select(doc.getVisitEndTime().getMinute() / 15);
         combo_consulta.getSelectionModel().select(doc.getExaminationRoom().getIdentNumber());
         ArrayList<Days> aux_days = doc.getVisitDays();
-        visualizar_dias(aux_days);
+        //visualizar_dias(aux_days);
         
         //editable
         field_nombre.setEditable(false);
@@ -428,5 +384,9 @@ public class VentanaAñadirController implements Initializable {
         String aux_style = ((VBox) e.getSource()).getStyle();
         return aux_style.matches(vboxDaysBackground);
     } 
+
+    void initPatient(Patient aux) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

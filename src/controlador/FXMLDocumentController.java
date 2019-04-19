@@ -30,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.*;
 
@@ -39,6 +40,7 @@ public class FXMLDocumentController implements Initializable {
     private final int PATIENT = 2;
     private final int APPOINTMENT = 3;
     
+    private int combodoc;
     public static int actual;
     
     private Label label;
@@ -49,7 +51,11 @@ public class FXMLDocumentController implements Initializable {
     public static ArrayList<Patient> pacientes;
     private static ObservableList<Patient> datos_pat = null;
     private static ObservableList<Doctor> datos_doc = null;
-    
+    private static ObservableList<Appointment> datos_citas = null;
+    private ArrayList<String> current_pacientes;
+    private ArrayList<String> current_doctores;
+    private Doctor doctor_actual;
+    private Patient paciente_actual;
     @FXML
     private TableColumn<Patient, String> col_nombre;
     @FXML
@@ -63,15 +69,25 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Doctor, String> col_apellidos_doctor;
     @FXML
-    private TextField texto_filtro;
-    @FXML
-    private ComboBox<?> cb_tipoFiltro;
-    @FXML
-    private Button btn_filtrar;
-    @FXML
     private Button btn_doctor;
     @FXML
     private Button btn_paciente;
+    @FXML
+    private VBox vbox_cita;
+    @FXML
+    private ComboBox<String> combo_doc_pat;
+    @FXML
+    private TextField field_buscar;
+    @FXML
+    private ComboBox<String> combor_esultado;
+    @FXML
+    private TableColumn<Appointment, String> col_nombre_cita;
+    @FXML
+    private TableColumn<Appointment, String> col_apellido_cita;
+    @FXML
+    private TableColumn<Appointment, String> col_fecha;
+    @FXML
+    private TableView<Appointment> table_cita;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -84,15 +100,82 @@ public class FXMLDocumentController implements Initializable {
         datos_pat = FXCollections.observableArrayList(pacientes);
         datos_doc = FXCollections.observableArrayList(doctores);
         
+        current_doctores = new ArrayList<>();
+        current_pacientes = new ArrayList<>();
+        
         tabla_doctor.setVisible(false);
         tabla_patient.setVisible(false);
+        vbox_cita.setVisible(false);
         
         initDoctors();
         initPatients();
+        initComboCita();
+        initCurrent();
         
+        
+        combodoc = 0;
         actual = 0;        
     }  
+    public void initComboCita(){
+        field_buscar.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(combodoc == DOCTOR){
+                ArrayList<String> lista = filtrar(DOCTOR, newValue);
+            
+                combor_esultado.getItems().clear();
+                combor_esultado.getItems().addAll(lista);
+            }
+            else if(combodoc == PATIENT){
+                ArrayList<String> lista = filtrar(PATIENT, newValue);
+            
+                combor_esultado.getItems().clear();
+                combor_esultado.getItems().addAll(lista);
+            }
+            
+        });
+        combor_esultado.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue == null){}
+            else if(combodoc == DOCTOR){
+                
+                doctor_actual = doctores.get(current_doctores.indexOf(newValue));
+                datos_citas = FXCollections.observableArrayList(
+                        database.getDoctorAppointments(doctor_actual.getIdentifier()));
+                table_cita.setItems(datos_citas);
+                col_nombre_cita.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getDoctor().getName()));
+                col_apellido_cita.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getDoctor().getSurname()));
+                col_fecha.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getAppointmentDateTime().toString()));
+            }
+            else if(combodoc == PATIENT){
+                paciente_actual = pacientes.get(current_pacientes.indexOf(newValue));
+                datos_citas = FXCollections.observableArrayList(
+                        database.getPatientAppointments(paciente_actual.getIdentifier()));
+                table_cita.setItems(datos_citas);
+                col_nombre_cita.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getPatient().getName()));
+                col_apellido_cita.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getPatient().getSurname()));
+                col_fecha.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getAppointmentDateTime().toString()));
+            }
+            
+        });
+        combo_doc_pat.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(combo_doc_pat.getSelectionModel().getSelectedItem().equals("Doctor")){
+                combodoc = DOCTOR;
+                combor_esultado.getItems().clear();
+                combor_esultado.getItems().addAll(current_doctores);
+                
+            }
+            else if(combo_doc_pat.getSelectionModel().getSelectedItem().equals("Paciente")){
+                combodoc = PATIENT;
+                combor_esultado.getItems().clear();
+                combor_esultado.getItems().addAll(current_pacientes);
+                
+            }
+        });
+        combo_doc_pat.getItems().add("Doctor");
+        combo_doc_pat.getItems().add("Paciente");
+    }
     
+    public void initCitas(){
+        
+    }
     //inicializa tabla pacientes
     private void initPatients(){        
         tabla_patient.setItems(datos_pat);
@@ -106,9 +189,11 @@ public class FXMLDocumentController implements Initializable {
         col_nombre_doctor.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getName()));
         col_apellidos_doctor.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getSurname()));
     }
+    
     public static ArrayList<Patient> getPatients(){
         return pacientes;
     }
+    
     public void addPatient(Patient pat) {
         pacientes.add(pat);
     }
@@ -118,6 +203,7 @@ public class FXMLDocumentController implements Initializable {
         setBackgroundButton((Button) event.getSource());
         tabla_patient.setVisible(false);
         tabla_doctor.setVisible(true);
+        vbox_cita.setVisible(false);
         actual = 1;
     }
 
@@ -126,6 +212,7 @@ public class FXMLDocumentController implements Initializable {
         setBackgroundButton((Button) event.getSource());        
         tabla_doctor.setVisible(false);
         tabla_patient.setVisible(true);
+        vbox_cita.setVisible(false);
         actual = 2;
     }
     
@@ -164,13 +251,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void show_appointments(MouseEvent event) throws IOException{
-        Stage stg_citas = new Stage();
-        FXMLLoader loaderCitas = new FXMLLoader(getClass().getResource("/vista/AñadirCita2.fxml"));
-        Parent root = loaderCitas.load();
-        Scene scnCitas = new Scene(root);
-        stg_citas.setTitle("Citas");
-        stg_citas.setScene(scnCitas);
-        stg_citas.showAndWait();
+        tabla_patient.setVisible(false);
+        tabla_doctor.setVisible(false);
+        vbox_cita.setVisible(true);
         actual = 3;
     }
 
@@ -180,8 +263,10 @@ public class FXMLDocumentController implements Initializable {
             case 1:
                 Stage stage_doctor = new Stage();
                 FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirDoctor.fxml"));
+                VentanaAñadirController auxC = new VentanaAñadirController();
+                miLoader_doctor.setController(auxC);
                 Parent root_doctor = miLoader_doctor.load();
-                ((VentanaAñadirController) miLoader_doctor.getController()).initListaDoctor(datos_doc);
+                ((VentanaAñadirController) miLoader_doctor.getController()).initListaDoctor(datos_doc);                
                 Scene scene_doctor = new Scene(root_doctor);
                 stage_doctor.setTitle("Añadir doctor");
                 stage_doctor.setScene(scene_doctor);
@@ -192,12 +277,19 @@ public class FXMLDocumentController implements Initializable {
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
                 Parent root = miLoader.load();
                 ((VentanaAñadirController) miLoader.getController()).initListaPersona(datos_pat);
-                Scene scene = new Scene(root);
+                Scene scene = new Scene(root);                
                 stage.setTitle("Añadir paciente");
                 stage.setScene(scene);
                 stage.showAndWait();
                 break;                
             case 3:
+                Stage stg_citas = new Stage();
+                FXMLLoader loaderCitas = new FXMLLoader(getClass().getResource("/vista/AñadirCita2.fxml"));
+                Parent root_cita = loaderCitas.load();
+                Scene scnCitas = new Scene(root_cita);
+                stg_citas.setTitle("Citas");
+                stg_citas.setScene(scnCitas);
+                stg_citas.showAndWait();
                 break;
         }
     }
@@ -250,8 +342,12 @@ public class FXMLDocumentController implements Initializable {
                 Doctor aux_doctor = tabla_doctor.getSelectionModel().getSelectedItem();
                 Stage stage_doctor = new Stage();
                 FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirDoctor.fxml"));
-                Parent root_doctor = miLoader_doctor.load();
-                ((VentanaAñadirController) miLoader_doctor.getController()).initDoctor(aux_doctor);
+                
+                informacionController auxC = new informacionController();
+                miLoader_doctor.setController(auxC);
+                
+                Parent root_doctor = miLoader_doctor.load();                
+                ((informacionController) miLoader_doctor.getController()).initDoctor(aux_doctor);
                 Scene scene_doctor = new Scene(root_doctor);
                 stage_doctor.setTitle("Visualizar doctor");
                 stage_doctor.setScene(scene_doctor);
@@ -262,8 +358,8 @@ public class FXMLDocumentController implements Initializable {
                 Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
                 Stage stage = new Stage();
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
-                Parent root = miLoader.load();
-                ((VentanaAñadirController) miLoader.getController()).initPatient(aux);
+                Parent root = miLoader.load();                
+                ((informacionController) miLoader.getController()).initPatient(aux);
                 Scene scene = new Scene(root);
                 stage.setTitle("Visualizar paciente");
                 stage.setScene(scene);
@@ -271,6 +367,83 @@ public class FXMLDocumentController implements Initializable {
                 break;
             case APPOINTMENT:
                 break;
+        }
+    }
+    
+    private ArrayList<String> filtrar(int agente, String newValue) throws StringIndexOutOfBoundsException{
+        ArrayList<String> res = new ArrayList<>();
+        if(agente == DOCTOR){
+            ArrayList<String> aux_doctores = current_doctores;
+            //lowercase string para facilitar las comparaciones
+            String texto_doctor = newValue.toLowerCase();
+            //caso texto vacio
+            if(texto_doctor.equals("")){
+               res = current_doctores; 
+            }
+            //caso texto solo tiene una letra
+            else if(texto_doctor.length() == 1){
+                for(int i = 0; i < aux_doctores.size(); i++){
+                    String doc = aux_doctores.get(i);
+                    if(doc.toLowerCase().startsWith(texto_doctor)){
+                        res.add(doc);
+                    }
+                }
+            }
+            //caso global
+            else {
+                for(int i = 0; i < aux_doctores.size(); i++){
+                    String doc = aux_doctores.get(i);
+                    if(texto_doctor.length() <= doc.length()){
+                        String sub = doc.toLowerCase().substring(0, texto_doctor.length());
+                        if(sub.equals(texto_doctor)){
+                            res.add(doc);
+                        }
+                    }
+                    
+                }
+            }
+            
+        }
+        else {
+            ArrayList<String> aux_pacientes = current_pacientes;
+            String texto_paciente = newValue;
+            if(texto_paciente.equals("")){
+                res = current_pacientes;
+            }
+            else if(texto_paciente.length() == 1){
+                for(int i = 0; i < aux_pacientes.size(); i++){
+                    String pac = aux_pacientes.get(i);
+                    if(pac.toLowerCase().startsWith(texto_paciente)){
+                        res.add(pac);
+                    }
+                }
+            }
+            else{
+                for(int i = 0; i < aux_pacientes.size(); i++){
+                    String pac = aux_pacientes.get(i);
+                    if(texto_paciente.length() <= pac.length()){
+                        String sub = pac.toLowerCase().substring(0, texto_paciente.length());
+                        if(sub.equals(texto_paciente)){
+                            res.add(pac);
+                        }
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        return res;
+    }
+    private void initCurrent(){
+        for (int i = 0; i < pacientes.size(); i++) {
+            Patient aux_pat = pacientes.get(i);
+            current_pacientes.add(aux_pat.getName() + " " + aux_pat.getSurname());
+            
+        }
+        for (int i = 0; i < doctores.size(); i++) {
+            Doctor aux_doc = doctores.get(i);
+            current_doctores.add(aux_doc.getName() + " " + aux_doc.getSurname());
         }
     }
 
