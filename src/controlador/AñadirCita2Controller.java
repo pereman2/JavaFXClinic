@@ -88,17 +88,18 @@ public class AñadirCita2Controller implements Initializable {
         current_pacientes = new ArrayList<>();
         doctor_actual = null;       
         date_picker = new DatePicker();
+        date_picker.setMaxSize(hbox_picker.getWidth(), hbox_picker.getHeight());
+        date_picker.setPrefSize(hbox_picker.getWidth(), hbox_picker.getHeight());
         date_picker.setShowWeekNumbers(true);
         DatePickerSkin saux = new DatePickerSkin(date_picker);
         hbox_picker.getChildren().add(saux.getPopupContent());
         
         
+        
         //inits
         initCurrent();
         initComboBox();
-        initListeners();
-        
-        
+        initListeners();        
     }    
 
     @FXML
