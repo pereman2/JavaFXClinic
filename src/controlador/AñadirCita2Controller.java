@@ -7,6 +7,7 @@ package controlador;
 
 import DBAccess.ClinicDBAccess;
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
+import com.sun.prism.paint.Color;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,11 +18,14 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -32,10 +36,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import javafx.util.Callback;
 import model.Appointment;
 import model.Days;
 import model.Doctor;
 import model.Patient;
+import sun.plugin2.jvm.RemoteJVMLauncher.CallBack;
 import utils.SlotAppointmentsWeek;
 import utils.SlotWeek;
 
@@ -89,20 +95,47 @@ public class AñadirCita2Controller implements Initializable {
         doctores = db.getDoctors();
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
-        doctor_actual = null;       
-        date_picker = new DatePicker();
+        doctor_actual = null;        
+        date_picker = new DatePicker(); 
+        date_picker.setOnMouseClicked(ev -> new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                dispDataPicker();
+            }            
+        });
         date_picker.setShowWeekNumbers(true);
         DatePickerSkin saux = new DatePickerSkin(date_picker);
-        hbox_picker.getChildren().add(saux.getPopupContent());
+        hbox_picker.getChildren().add(saux.getPopupContent());    
         
         
         //inits
         initCurrent();
         initComboBox();
-        initListeners();
+        initListeners();        
+    } 
+    
+    private void dispDataPicker() {
+        ArrayList<Days> days = doctor_actual.getVisitDays();        
+        ArrayList<Appointment> aux = db.getDoctorAppointments(
+                                        doctor_actual.getIdentifier());
         
-        
-    }    
+        date_picker.setDayCellFactory(dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                for (Days d : days) {
+                    if (d.ordinal() + 1 == item.getDayOfWeek().getValue()) {
+                        this.setStyle("-fx-background-color: green;");
+                    }
+                    else {
+                        this.setStyle("-fx-background-color: gray;");
+                    }
+                }
+            }
+        }); 
+    }
+    
+    
 
     @FXML
     private void text_change(InputMethodEvent event) {
@@ -142,7 +175,7 @@ public class AñadirCita2Controller implements Initializable {
         });
         combo_doctor.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             doctor_actual= doctores.get(current_doctores.indexOf(newValue));
-            hora.setText(doctor_actual.getVisitStartTime().toString() + doctor_actual.getVisitEndTime().toString());
+            //hora.setText(doctor_actual.getVisitStartTime().toString() + doctor_actual.getVisitEndTime().toString());
             update();
             
         });

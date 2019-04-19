@@ -358,6 +358,8 @@ public class FXMLDocumentController implements Initializable {
                 Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
                 Stage stage = new Stage();
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
+                informacionController auxP = new informacionController();
+                miLoader.setController(auxP);
                 Parent root = miLoader.load();                
                 ((informacionController) miLoader.getController()).initPatient(aux);
                 Scene scene = new Scene(root);
