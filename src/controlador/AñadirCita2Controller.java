@@ -12,6 +12,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -32,6 +33,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -98,6 +100,7 @@ public class AñadirCita2Controller implements Initializable {
         }
         
     } 
+    
     private void init(){
         db = FXMLDocumentController.getClinicDBAccess();
         pacientes = db.getPatients();
