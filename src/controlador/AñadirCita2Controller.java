@@ -35,6 +35,7 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import javafx.util.Callback;
 import model.Appointment;
@@ -96,13 +97,7 @@ public class AñadirCita2Controller implements Initializable {
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
         doctor_actual = null;        
-        date_picker = new DatePicker(); 
-        date_picker.setOnMouseClicked(ev -> new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                dispDataPicker();
-            }            
-        });
+        date_picker = new DatePicker();         
         date_picker.setShowWeekNumbers(true);
         DatePickerSkin saux = new DatePickerSkin(date_picker);
         hbox_picker.getChildren().add(saux.getPopupContent());    
@@ -118,21 +113,37 @@ public class AñadirCita2Controller implements Initializable {
         ArrayList<Days> days = doctor_actual.getVisitDays();        
         ArrayList<Appointment> aux = db.getDoctorAppointments(
                                         doctor_actual.getIdentifier());
-        
-        date_picker.setDayCellFactory(dp -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                for (Days d : days) {
-                    if (d.ordinal() + 1 == item.getDayOfWeek().getValue()) {
-                        this.setStyle("-fx-background-color: green;");
+
+
+
+        Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        // Must call super
+                        super.updateItem(item, empty);
+                        if (!item.isBefore(LocalDate.now())) {
+                            this.setDisable(false);
+                            for (Days d : days) {
+                                if (d.ordinal() + 1 == item.getDayOfWeek().getValue()) {                            
+                                    this.setStyle("-fx-background-color: green;");
+                                }
+                                else {
+                                    this.setStyle("-fx-background-color: red;");
+                                }
+                            }
+                        }
+                        else {
+                            this.setDisable(true);
+                        }                       
                     }
-                    else {
-                        this.setStyle("-fx-background-color: gray;");
-                    }
-                }
+                };
             }
-        }); 
+        };        
+        date_picker.setDayCellFactory(dayCellFactory);
+
+            
     }
     
     
@@ -176,6 +187,7 @@ public class AñadirCita2Controller implements Initializable {
         combo_doctor.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             doctor_actual= doctores.get(current_doctores.indexOf(newValue));
             //hora.setText(doctor_actual.getVisitStartTime().toString() + doctor_actual.getVisitEndTime().toString());
+            dispDataPicker();
             update();
             
         });
@@ -192,6 +204,7 @@ public class AñadirCita2Controller implements Initializable {
         
     }
     private void update(){
+        
         if(combo_min.getSelectionModel().getSelectedItem() != null &&
                     combo_hora.getSelectionModel().getSelectedItem() != null &&
                     date_picker.getValue() != null &&
@@ -202,10 +215,12 @@ public class AñadirCita2Controller implements Initializable {
                     LocalTime time3 = LocalTime.of(combo_hora.getSelectionModel().getSelectedItem(),
                             combo_min.getSelectionModel().getSelectedItem());
                     if(time3.compareTo(time1) >= 0 && time3.compareTo(time2) <= 0) {
-                        ok.setText(checkDisponible(aux));
+                        //ok.setText(checkDisponible(aux));
+                        System.out.println("True");
                     }
                     else {
-                        ok.setText("Hora incorrecta");
+                        //ok.setText("Hora incorrecta");
+                        System.out.println("False");
                     }
                     
             }
@@ -386,10 +401,13 @@ public class AñadirCita2Controller implements Initializable {
         String str_pac = combo_paciente.getSelectionModel().getSelectedItem();
         Patient pat = pacientes.get(current_pacientes.indexOf(str_pac));
         Appointment aux = new Appointment(dateTime, doctor_actual, pat);
-        db.getAppointments().add(aux);
+        db.getAppointments().add(aux);       
+        cancelar(event);
     }
 
     @FXML
     private void cancelar(MouseEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }
