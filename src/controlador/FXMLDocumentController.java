@@ -275,6 +275,8 @@ public class FXMLDocumentController implements Initializable {
             case 2:
                 Stage stage = new Stage();
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
+                VentanaAñadirController auxP = new VentanaAñadirController();
+                miLoader.setController(auxP);
                 Parent root = miLoader.load();
                 ((VentanaAñadirController) miLoader.getController()).initListaPersona(datos_pat);
                 Scene scene = new Scene(root);                
@@ -368,6 +370,15 @@ public class FXMLDocumentController implements Initializable {
                 stage.showAndWait();
                 break;
             case APPOINTMENT:
+                //Appointment aux_cita = table_cita.getSelectionModel().getSelectedItem();
+                Stage stage_cita = new Stage();
+                FXMLLoader miLoader_cita = new FXMLLoader(getClass().getResource("/vista/AñadirCita2.fxml"));
+                Parent root_cita = miLoader_cita.load();                
+                ((AñadirCita2Controller) miLoader_cita.getController()).initCita(table_cita.getSelectionModel().getSelectedItem());
+                Scene scene_cita = new Scene(root_cita);
+                stage_cita.setTitle("Visualizar paciente");
+                stage_cita.setScene(scene_cita);
+                stage_cita.showAndWait();
                 break;
         }
     }

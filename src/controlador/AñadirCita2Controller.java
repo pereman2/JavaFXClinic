@@ -12,6 +12,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -33,6 +34,7 @@ import javafx.scene.control.Skin;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -70,6 +72,7 @@ public class AñadirCita2Controller implements Initializable {
     
     private final int DOCTOR = 1;
     private final int PATIENT = 2;
+    private int mode = 1;
     
     private ClinicDBAccess db;
     private ArrayList<Patient> pacientes;
@@ -78,6 +81,7 @@ public class AñadirCita2Controller implements Initializable {
     private ArrayList<String> current_doctores;
     private ArrayList<SlotWeek> semana_doctor;
     private Doctor doctor_actual;
+    private Appointment appointment;
     private Text hora;
     private Text ok;
     @FXML
@@ -92,7 +96,14 @@ public class AñadirCita2Controller implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {        
+    public void initialize(URL url, ResourceBundle rb) {
+        if(mode == 1){
+            init();
+        }
+        
+    } 
+    
+    private void init(){
         db = FXMLDocumentController.getClinicDBAccess();
         pacientes = db.getPatients();
         doctores = db.getDoctors();
@@ -107,8 +118,7 @@ public class AñadirCita2Controller implements Initializable {
         initCurrent();
         initComboBox();
         initListeners();        
-    } 
-    
+    }
     private void dispDataPicker() {
         ArrayList<Days> days = doctor_actual.getVisitDays();        
         ArrayList<Appointment> aux = db.getDoctorAppointments(
@@ -176,6 +186,7 @@ public class AñadirCita2Controller implements Initializable {
         });
         combo_doctor.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             doctor_actual= doctores.get(current_doctores.indexOf(newValue));
+            ajustarHora();
             //hora.setText(doctor_actual.getVisitStartTime().toString() + doctor_actual.getVisitEndTime().toString());
             dispDataPicker();
             update();
@@ -189,6 +200,7 @@ public class AñadirCita2Controller implements Initializable {
             update();
         });
         combo_hora.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            ajustarMinuto();
             update();
         });
         
@@ -381,7 +393,93 @@ public class AñadirCita2Controller implements Initializable {
         
         return res;
     }
+    public void initCita(Appointment ap){     
+        mode = 0;
+        String doc = ap.getDoctor().getName() + " " + ap.getDoctor().getSurname();
+        String pat = ap.getPatient().getName() + " " + ap.getPatient().getSurname();
+        combo_doctor.getItems().clear();
+        combo_doctor.getItems().add(doc);
+        combo_doctor.getSelectionModel().select(0);
+        
+        combo_paciente.getItems().clear();
+        combo_paciente.getItems().add(pat);
+        combo_paciente.getSelectionModel().select(0);
+        
+        combo_hora.getItems().clear();
+        combo_hora.getItems().add(ap.getAppointmentDateTime().getHour());
+        combo_hora.getSelectionModel().select(0);
+        combo_min.getItems().clear();
+        combo_min.getItems().add(ap.getAppointmentDateTime().getMinute());
+        combo_min.getSelectionModel().select(0);
+        
+        date_picker.setValue(ap.getAppointmentDateTime().toLocalDate());
+        
+        date_picker.setDisable(true);
+        combo_hora.setEditable(false);
+        combo_min.setEditable(false);
+        combo_paciente.setEditable(false);
+        combo_doctor.setEditable(false);
+        field_doctor.setDisable(true);
+        field_paciente.setDisable(true);
+    }
+    private void ajustarMinuto(){
+        int inih = doctor_actual.getVisitStartTime().getHour();
+        int finh = doctor_actual.getVisitEndTime().getHour();
+        int inim = doctor_actual.getVisitStartTime().getMinute();
+        int finm = doctor_actual.getVisitEndTime().getMinute();
+        ArrayList<Integer> lista = new ArrayList<>();
+        
+        if(combo_hora.getSelectionModel().getSelectedItem() != null) {
+            int actual = combo_hora.getSelectionModel().getSelectedItem();
+            if(actual == inih){
+                for(int i = 0; i < 4; i++){
+                    Integer m = (Integer) i * 15;
+                    if(m >= inim){
+                        lista.add(m);
+                    }
+                }
+            }
+            else if(actual == finh) {
+                for(int i = 0; i < 4; i++){
+                    Integer m = (Integer) i * 15;
+                    if(m <= finm){
+                        lista.add(m);
+                    }
+                }
+            }
+            else{
+                for(int i = 0; i < 4; i++){
+                    Integer m = (Integer) i * 15;
+                    lista.add(m);
+                }
+            }
+        }
+        combo_min.getItems().clear();
+        combo_min.getItems().addAll(lista);
+    }
+    private void ajustarHora(){
+        int inih = doctor_actual.getVisitStartTime().getHour();
+        int finh = doctor_actual.getVisitEndTime().getHour();
+        ArrayList<Integer> lista = new ArrayList<>();
+        if(inih < finh){
+            for(int i = 0; i < 24; i++){
+                if(i >= inih && i <= finh){
+                    lista.add(i);
+                }
+            }
+        }
+        else {
+            for(int i = 0; i < 24; i++){
+                if(i <= inih && i >= finh){
+                    lista.add(i);
+                }
+            }
+        }
+        combo_hora.getItems().clear();
+        combo_hora.getItems().addAll(lista);
 
+
+    }
     @FXML
     private void aceptar(MouseEvent event) {
         int hora = combo_hora.getSelectionModel().getSelectedItem();
