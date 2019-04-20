@@ -25,11 +25,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Skin;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -63,9 +65,7 @@ public class AñadirCita2Controller implements Initializable {
     @FXML
     private ComboBox<String> combo_paciente;
     @FXML
-    private ComboBox<String> combo_doctor;
-   
-    private DatePicker date_picker;
+    private ComboBox<String> combo_doctor;    
     @FXML
     private ComboBox<Integer> combo_hora;
     @FXML
@@ -91,6 +91,8 @@ public class AñadirCita2Controller implements Initializable {
     private Button btn_aceptar;
     @FXML
     private Button btn_cancelar;
+    @FXML
+    private DatePicker date2;
     /**
      * Initializes the controller class.
      */
@@ -109,10 +111,8 @@ public class AñadirCita2Controller implements Initializable {
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
         doctor_actual = null;        
-        date_picker = new DatePicker();         
-        date_picker.setShowWeekNumbers(true);
-        DatePickerSkin saux = new DatePickerSkin(date_picker);
-        hbox_picker.getChildren().add(saux.getPopupContent());    
+            
+        System.out.println("ea");
         
         
         //inits
@@ -124,36 +124,25 @@ public class AñadirCita2Controller implements Initializable {
         ArrayList<Days> days = doctor_actual.getVisitDays();        
         ArrayList<Appointment> aux = db.getDoctorAppointments(
                                         doctor_actual.getIdentifier());
-
-
-
-        Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        // Must call super
-                        super.updateItem(item, empty);
-                        if (!item.isBefore(LocalDate.now())) {
-                            this.setDisable(false);
-                            for (Days d : days) {
-                                if (d.ordinal() + 1 == item.getDayOfWeek().getValue()) {                            
-                                    this.setStyle("-fx-background-color: green;");
-                                }
-                                else {
-                                    this.setStyle("-fx-background-color: red;");
-                                }
-                            }
-                        }
-                        else {
-                            this.setDisable(true);
-                        }                       
+        
+        Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    for (Days d : days) {
+                        boolean comp = d.ordinal() + 1 == item.getDayOfWeek().getValue();
+                        if (comp) {
+                            this.setStyle("-fx-background-color: green;");                            
+                        }                   
                     }
-                };
-            }
-        };        
-        date_picker.setDayCellFactory(dayCellFactory);
-
+                    if (item.isBefore(LocalDate.now())){
+                        this.setStyle("-fx-background-color: gray;");
+                    }
+                }
+        };
+        
+        date2.setDayCellFactory(dayCellFactory);
+        
             
     }
     
@@ -203,7 +192,7 @@ public class AñadirCita2Controller implements Initializable {
             update();
             
         });
-        date_picker.promptTextProperty().addListener((observable, oldValue, newValue) -> {
+        date2.promptTextProperty().addListener((observable, oldValue, newValue) -> {
             update();
         });
         combo_min.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -220,7 +209,7 @@ public class AñadirCita2Controller implements Initializable {
         
         if(combo_min.getSelectionModel().getSelectedItem() != null &&
                     combo_hora.getSelectionModel().getSelectedItem() != null &&
-                    date_picker.getValue() != null &&
+                    date2.getValue() != null &&
                     combo_doctor.getSelectionModel().getSelectedItem() != null){
                     SlotWeek aux = slotMatch();
                     LocalTime time1 = doctor_actual.getVisitStartTime();
@@ -238,28 +227,29 @@ public class AñadirCita2Controller implements Initializable {
                     
             }
     }
+    //devuelve slotweek seleccionado
     private SlotWeek slotMatch() {
             ArrayList<Days> visitDays = doctor_actual.getVisitDays();
             LocalTime visitStartTime = doctor_actual.getVisitStartTime();
             LocalTime visitEndTime = doctor_actual.getVisitEndTime();
-            LocalDate date = date_picker.getValue();
+            LocalDate date = date2.getValue();
             int semana = getDiaSemana(date);
             ArrayList<Appointment> appointments = db.getDoctorAppointments(doctor_actual.getIdentifier());
             semana_doctor = SlotAppointmentsWeek.getAppointmentsWeek(semana, visitDays, visitStartTime, visitEndTime, appointments);
             int hora = combo_hora.getSelectionModel().getSelectedItem();
             int min = combo_min.getSelectionModel().getSelectedItem();
             SlotWeek res = null;
-            for (int i = 0; i < semana_doctor.size(); i++) {
-            SlotWeek aux = semana_doctor.get(i);
-            if(checkSlot(aux.getSlot(), hora, min)){
-                res = aux;
-                break;
+                for (int i = 0; i < semana_doctor.size(); i++) {
+                    SlotWeek aux = semana_doctor.get(i);
+                    if(checkSlot(aux.getSlot(), hora, min)){
+                        res = aux;
+                        break;
+                    }
             }
-        }
         return res;
     }
     private String checkDisponible(SlotWeek slot){
-        int dia = date_picker.getValue().getDayOfWeek().getValue();
+        int dia = date2.getValue().getDayOfWeek().getValue();
         String str_dia = "";
         switch(dia){
             case 1:
@@ -423,9 +413,9 @@ public class AñadirCita2Controller implements Initializable {
         combo_min.getItems().add(ap.getAppointmentDateTime().getMinute());
         combo_min.getSelectionModel().select(0);
         
-        date_picker.setValue(ap.getAppointmentDateTime().toLocalDate());
+        date2.setValue(ap.getAppointmentDateTime().toLocalDate());
         
-        date_picker.setDisable(true);
+        date2.setDisable(true);
         combo_hora.setEditable(false);
         combo_min.setEditable(false);
         combo_paciente.setEditable(false);
@@ -492,24 +482,49 @@ public class AñadirCita2Controller implements Initializable {
 
     }
     private boolean esCorrecto(){
-        return combo_doctor != null &&
-               combo_paciente != null &&
-               combo_hora != null&&
-               combo_min != null && 
-               date_picker.getValue() != null;
+        return combo_doctor.getSelectionModel().getSelectedItem() != null &&
+               combo_paciente.getSelectionModel().getSelectedItem() != null &&
+               combo_hora.getSelectionModel().getSelectedItem() != null&&
+               combo_min.getSelectionModel().getSelectedItem() != null && 
+               esDiaTrabajo(date2.getValue().getDayOfWeek().getValue()) &&
+               !horaOcupada();
+    }
+    private boolean horaOcupada(){
+        boolean res = true;
+        SlotWeek slot = slotMatch();
+        if(checkDisponible(slot).equals("Free")){
+            res = false;
+        }
+        if(res){
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Hora ocupada");
+            alerta.setHeaderText("Hora ocupada");
+            alerta.setContentText("No se puede añadir cita a esta hora");
+            alerta.showAndWait();
+        }
+        return res;
+    }
+    private boolean esDiaTrabajo(int dia){
+        boolean res = false;
+        ArrayList<Days> days = doctor_actual.getVisitDays();
+        for(Days d : days){
+            if (d.ordinal() + 1 == dia){
+                res = true;
+            }
+        }
+        return res;
     }
     @FXML
     private void aceptar(MouseEvent event) {
         if(esCorrecto()){
             int hora = combo_hora.getSelectionModel().getSelectedItem();
             int min = combo_min.getSelectionModel().getSelectedItem();
-            LocalDate date = date_picker.getValue();
+            LocalDate date = date2.getValue();
             LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of(hora, min));
             String str_pac = combo_paciente.getSelectionModel().getSelectedItem();
             Patient pat = pacientes.get(current_pacientes.indexOf(str_pac));
             Appointment aux = new Appointment(dateTime, doctor_actual, pat);
-            db.getAppointments().add(aux);    
-            FXMLDocumentController.getClinicDBAccess().getAppointments().add(aux);
+            db.getAppointments().add(aux);
             cancelar(event);
         }
         
@@ -519,5 +534,10 @@ public class AñadirCita2Controller implements Initializable {
     private void cancelar(MouseEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void eatobe(MouseEvent event) {        
+        dispDataPicker();
     }
 }

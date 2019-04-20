@@ -338,6 +338,7 @@ public class FXMLDocumentController implements Initializable {
                 datos_pat.remove(aux);
                 break;
             case APPOINTMENT:
+                Appointment aux_cita = table_cita.getSelectionModel().getSelectedItem();
                 break;
         }
     }
