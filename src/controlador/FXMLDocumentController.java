@@ -88,6 +88,8 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Appointment, String> col_fecha;
     @FXML
     private TableView<Appointment> table_cita;
+    private Button btn_citas;
+    private String initStyle;
     @FXML
     private Label text_clinic;
     
@@ -116,6 +118,7 @@ public class FXMLDocumentController implements Initializable {
         
         text_clinic.setText(database.getClinicName());
         
+        initStyle = btn_doctor.getStyle();
         
         combodoc = 0;
         actual = 0;        
@@ -225,37 +228,30 @@ public class FXMLDocumentController implements Initializable {
                         "-fx-border-radius: 24px;" + 
                         "-fx-border-color: gray;" + 
                         "-fx-border-width: 5px;" +
-                        "-fx-background-radius: 24px; ";
+                        "-fx-background-radius: 24px; ";    
         
-        String initStyle = "-fx-background-color: transparent;" + 
-                            "-fx-border-radius: 24px;" + 
-                            "-fx-border-color: transparent;" + 
-                            "-fx-border-width: 5px;" +
-                            "-fx-background-radius: 24px; ";
-        
-        if (btn_doctor.getStyle().equals(style) && b == btn_paciente) {
+        if (b == btn_paciente) {            
             btn_doctor.setStyle(initStyle);
+            btn_citas.setStyle(initStyle);
             btn_paciente.setStyle(style);
         }
-        else if (btn_paciente.getStyle().equals(style) && b == btn_doctor) {
+        else if (b == btn_doctor) {            
             btn_doctor.setStyle(style);
             btn_paciente.setStyle(initStyle);
+            btn_citas.setStyle(initStyle);
         }
-        else {
-            if(style.equals(b.getStyle())) {
-                b.setStyle(initStyle);
-            }
-            else {            
-                b.setStyle(style);
-            }
-        }
+        else if (b == btn_citas) {             
+            btn_doctor.setStyle(initStyle);
+            btn_paciente.setStyle(initStyle);
+            btn_citas.setStyle(style);
+        }        
         
        
     }
 
     @FXML
     private void show_appointments(MouseEvent event) throws IOException{
-        setBackgroundButton((Button) event.getSource());
+        setBackgroundButton((Button) event.getSource()); 
         tabla_patient.setVisible(false);
         tabla_doctor.setVisible(false);
         vbox_cita.setVisible(true);
@@ -464,8 +460,5 @@ public class FXMLDocumentController implements Initializable {
             Doctor aux_doc = doctores.get(i);
             current_doctores.add(aux_doc.getName() + " " + aux_doc.getSurname());
         }
-    }
-
-
-    
+    }    
 }
