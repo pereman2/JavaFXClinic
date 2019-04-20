@@ -113,6 +113,7 @@ public class VentanaAñadirController implements Initializable {
             initComboBox();
             initDays();
         }        
+        
     }    
 
     @FXML

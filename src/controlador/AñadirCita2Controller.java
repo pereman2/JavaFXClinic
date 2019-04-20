@@ -112,7 +112,7 @@ public class AñadirCita2Controller implements Initializable {
         current_pacientes = new ArrayList<>();
         doctor_actual = null; 
         
-        
+        date2.setDisable(true);
         
         //inits
         initCurrent();
@@ -145,27 +145,6 @@ public class AñadirCita2Controller implements Initializable {
     
     
 
-    @FXML
-    private void text_change(InputMethodEvent event) {
-        /*TextField aux = (TextField) event.getSource();
-        ArrayList<String> lista;
-        if(event.getSource().equals(field_doctor)){
-            lista = filtrar(DOCTOR);
-            combo_doctor.getItems().remove(0, 
-                                            combo_doctor.getItems().size() - 1);
-            combo_doctor.getItems().addAll(lista);
-        }
-        else {
-            lista = filtrar(PATIENT);
-            combo_paciente.getItems().remove(0, 
-                                              combo_paciente.getItems().size() - 1);
-            combo_paciente.getItems().addAll(lista);
-        }*/
-        
-        
-        
-        
-    }
     private void initListeners(){
         field_paciente.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             ArrayList<String> lista = filtrar(PATIENT, newValue);
@@ -184,6 +163,7 @@ public class AñadirCita2Controller implements Initializable {
         combo_doctor.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             doctor_actual= doctores.get(current_doctores.indexOf(newValue));
             ajustarHora();
+            date2.setDisable(false);
             //hora.setText(doctor_actual.getVisitStartTime().toString() + doctor_actual.getVisitEndTime().toString());
             dispDataPicker();
             update();
@@ -240,9 +220,8 @@ public class AñadirCita2Controller implements Initializable {
                     SlotWeek aux = semana_doctor.get(i);
                     if(checkSlot(aux.getSlot(), hora, min)){
                         res = aux;
-                        break;
                     }
-            }
+                }
         return res;
     }
     private String checkDisponible(SlotWeek slot){
@@ -419,6 +398,9 @@ public class AñadirCita2Controller implements Initializable {
         combo_doctor.setEditable(false);
         field_doctor.setDisable(true);
         field_paciente.setDisable(true);
+        
+        btn_aceptar.setVisible(false);
+        btn_cancelar.setText("Salir");
     }
     private void ajustarMinuto(){
         int inih = doctor_actual.getVisitStartTime().getHour();
@@ -534,7 +516,9 @@ public class AñadirCita2Controller implements Initializable {
     }
 
     @FXML
-    private void eatobe(MouseEvent event) {        
-        dispDataPicker();
+    private void cambio_date(MouseEvent event) { 
+        
+        if(combo_doctor.getSelectionModel().getSelectedItem() != null){ dispDataPicker(); }
+        
     }
 }

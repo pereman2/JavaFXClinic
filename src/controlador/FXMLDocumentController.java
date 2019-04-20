@@ -14,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import DBAccess.ClinicDBAccess;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.*;
 
@@ -56,6 +59,7 @@ public class FXMLDocumentController implements Initializable {
     public static ArrayList<String> current_doctores;
     public static ObservableList<String> datos_current_paciente = null;
     public static ObservableList<String> datos_current_doctor = null;
+    private Stage stage_actual;
     private Doctor doctor_actual;
     private Patient paciente_actual;
     @FXML
@@ -98,6 +102,8 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //stage_actual = (Stage)text_clinic.getScene().getWindow();
+        //stage_actual.initModality(Modality.APPLICATION_MODAL);
         //inicializa la base de datos en database
         database = ClinicDBAccess.getSingletonClinicDBAccess();
         //inicializa los arraylist de pacientes y doctores
@@ -279,6 +285,7 @@ public class FXMLDocumentController implements Initializable {
                 Scene scene_doctor = new Scene(root_doctor);
                 stage_doctor.setTitle("Añadir doctor");
                 stage_doctor.setScene(scene_doctor);
+                stage_doctor.initModality(Modality.APPLICATION_MODAL);
                 stage_doctor.showAndWait();
                 break;                
             case 2:
@@ -291,6 +298,7 @@ public class FXMLDocumentController implements Initializable {
                 Scene scene = new Scene(root);                
                 stage.setTitle("Añadir paciente");
                 stage.setScene(scene);
+                stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
                 break;                
             case 3:
@@ -300,6 +308,7 @@ public class FXMLDocumentController implements Initializable {
                 Scene scnCitas = new Scene(root_cita);
                 stg_citas.setTitle("Citas");
                 stg_citas.setScene(scnCitas);
+                stg_citas.initModality(Modality.APPLICATION_MODAL);
                 stg_citas.showAndWait();
                 break;
         }
@@ -311,38 +320,67 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void eliminar(MouseEvent event) {
+    private void eliminar(MouseEvent event){
         switch(actual){
             case DOCTOR:
+                if(tabla_doctor.getSelectionModel().getSelectedItem() == null){ break; }
                 Doctor aux_doctor = tabla_doctor.getSelectionModel().getSelectedItem();
                 if (database.hasAppointments(aux_doctor)) {
                     Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                     alerta.setTitle("Cita encontrada");
                     alerta.setHeaderText("El doctor ya tiene una cita");
                     alerta.setContentText("Imposible eliminar doctor con una cita asignada");
+                    alerta.initModality(Modality.APPLICATION_MODAL);
                     alerta.showAndWait();
                     break;
                 }         
+                Alert alerta_doc = new Alert(Alert.AlertType.INFORMATION);
+                alerta_doc.setTitle("Doctor eliminado");
+                alerta_doc.setHeaderText("Doctor eliminado");
+                alerta_doc.setContentText("Doctor eliminado correctamente");
+                alerta_doc.initModality(Modality.APPLICATION_MODAL);
+                alerta_doc.showAndWait();
                 database.getDoctors().remove(aux_doctor);
                 datos_doc.remove(aux_doctor);
                 break;
                 
             case PATIENT:
+                if(tabla_patient.getSelectionModel().getSelectedItem() == null){ break; }
                 Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
                 if (database.hasAppointments(aux)) {
                     Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                     alerta.setTitle("Cita encontrada");
                     alerta.setHeaderText("El paciente ya tiene una cita");
                     alerta.setContentText("Imposible eliminar paciente con una cita asignada");
+                    alerta.initModality(Modality.APPLICATION_MODAL);
                     alerta.showAndWait();
                     break;
                 }
+                Alert alerta_pat = new Alert(Alert.AlertType.INFORMATION);
+                alerta_pat.setTitle("Doctor eliminado");
+                alerta_pat.setHeaderText("Doctor eliminado");
+                alerta_pat.setContentText("Doctor eliminado correctamente");
+                alerta_pat.initModality(Modality.APPLICATION_MODAL);
+                alerta_pat.showAndWait();
 
                 database.getPatients().remove(aux);
                 datos_pat.remove(aux);
                 break;
             case APPOINTMENT:
+                if(table_cita.getSelectionModel().getSelectedItem() == null){ break; }
                 Appointment aux_cita = table_cita.getSelectionModel().getSelectedItem();
+                if(!aux_cita.getAppointmentDateTime().toLocalDate().isBefore(LocalDate.now())){
+                    database.getAppointments().remove(aux_cita);
+                    table_cita.getItems().remove(aux_cita);
+                    Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                    alerta.setTitle("Cita eliminada");
+                    alerta.setHeaderText("Cita eliminada");
+                    alerta.setContentText("Cita eliminada correctamente");
+                    alerta.initModality(Modality.APPLICATION_MODAL);
+                    alerta.showAndWait();
+                }
+                
+                
                 break;
         }
     }
@@ -351,6 +389,7 @@ public class FXMLDocumentController implements Initializable {
     private void visualizar(MouseEvent event) throws IOException {
         switch(actual){
             case DOCTOR:
+                if(tabla_doctor.getSelectionModel().getSelectedItem() == null){ break; }
                 Doctor aux_doctor = tabla_doctor.getSelectionModel().getSelectedItem();
                 Stage stage_doctor = new Stage();
                 FXMLLoader miLoader_doctor = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirDoctor.fxml"));
@@ -363,10 +402,13 @@ public class FXMLDocumentController implements Initializable {
                 Scene scene_doctor = new Scene(root_doctor);
                 stage_doctor.setTitle("Visualizar doctor");
                 stage_doctor.setScene(scene_doctor);
-                stage_doctor.showAndWait();             
+                stage_doctor.initModality(Modality.APPLICATION_MODAL);
+                stage_doctor.showAndWait();       
+                
                 break;
                 
             case PATIENT:
+                if(tabla_patient.getSelectionModel().getSelectedItem() == null){ break; }
                 Patient aux = tabla_patient.getSelectionModel().getSelectedItem();
                 Stage stage = new Stage();
                 FXMLLoader miLoader = new FXMLLoader(getClass().getResource("/vista/VentanaAñadirPaciente.fxml"));
@@ -377,9 +419,11 @@ public class FXMLDocumentController implements Initializable {
                 Scene scene = new Scene(root);
                 stage.setTitle("Visualizar paciente");
                 stage.setScene(scene);
+                stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
                 break;
             case APPOINTMENT:
+                if(table_cita.getSelectionModel().getSelectedItem() == null){ break; }
                 //Appointment aux_cita = table_cita.getSelectionModel().getSelectedItem();
                 Stage stage_cita = new Stage();
                 FXMLLoader miLoader_cita = new FXMLLoader(getClass().getResource("/vista/AñadirCita2.fxml"));
@@ -388,6 +432,7 @@ public class FXMLDocumentController implements Initializable {
                 Scene scene_cita = new Scene(root_cita);
                 stage_cita.setTitle("Visualizar paciente");
                 stage_cita.setScene(scene_cita);
+                stage_cita.initModality(Modality.APPLICATION_MODAL);
                 stage_cita.showAndWait();
                 break;
         }
