@@ -328,39 +328,7 @@ public class VentanaAñadirController implements Initializable {
         doctor_local = doc;
     }   
   
-    public void initDoctor(Doctor doc){
-        //fields
-        field_nombre.setText(doc.getName());
-        field_apellidos.setText(doc.getSurname());
-        field_dni.setText(doc.getIdentifier());
-        field_telefono.setText(doc.getTelephon());
-        img.setImage(doc.getPhoto());
-        combo_hora.getSelectionModel().select(doc.getVisitStartTime().getHour());
-        combo_min.getSelectionModel().select(doc.getVisitStartTime().getMinute() / 15);
-        combo_hora1.getSelectionModel().select(doc.getVisitEndTime().getHour());
-        combo_min1.getSelectionModel().select(doc.getVisitEndTime().getMinute() / 15);
-        combo_consulta.getSelectionModel().select(doc.getExaminationRoom().getIdentNumber());
-        ArrayList<Days> aux_days = doc.getVisitDays();
-        //visualizar_dias(aux_days);
-        
-        //editable
-        field_nombre.setEditable(false);
-        field_apellidos.setDisable(false);
-        field_dni.setEditable(false);
-        field_telefono.setEditable(false);
-        combo_hora.setDisable(true);
-        combo_hora1.setDisable(true);
-        combo_min.setDisable(true);
-        combo_min1.setDisable(true);
-        combo_consulta.setDisable(true);
-        
-        button_aceptar.setDisable(true);
-        button_aceptar.setVisible(false);
-        button_cancelar.setText("Salir");
-        
-        
-        img.setDisable(true);
-    }
+    
     
     
     @FXML
@@ -385,8 +353,5 @@ public class VentanaAñadirController implements Initializable {
         return aux_style.matches(vboxDaysBackground);
     } 
 
-    void initPatient(Patient aux) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }
