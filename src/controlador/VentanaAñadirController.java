@@ -141,9 +141,9 @@ public class VentanaAñadirController implements Initializable {
                 aux.setVisitDays(getDays());
                 
                 
-                db.getDoctors().add(aux);
                 doctor_local.add(aux);
-                FXMLDocumentController.actualizarDoctores(aux);
+                FXMLDocumentController.current_doctores.add(aux.getName() + " " + aux.getSurname());
+                FXMLDocumentController.datos_current_doctor.add(aux.getName() + " " + aux.getSurname());
                 FXMLDocumentController.getClinicDBAccess().getDoctors().add(aux);
                 ((Stage) img.getScene().getWindow()).close();               
             }
@@ -151,7 +151,9 @@ public class VentanaAñadirController implements Initializable {
                 Patient aux = new Patient(identifier, name, surname, telephon, photo);
                 FXMLDocumentController.getClinicDBAccess().getPatients().add(aux);
                 pacientes_local.add(aux);
-                FXMLDocumentController.actualizarPacientes(aux);
+                FXMLDocumentController.current_pacientes.add(aux.getName() + " " + aux.getSurname());
+                FXMLDocumentController.datos_current_paciente.add(aux.getName() + " " + aux.getSurname());
+                
                 ((Stage) img.getScene().getWindow()).close();
             }
         }

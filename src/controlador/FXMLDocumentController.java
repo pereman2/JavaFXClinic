@@ -52,8 +52,10 @@ public class FXMLDocumentController implements Initializable {
     private static ObservableList<Patient> datos_pat = null;
     private static ObservableList<Doctor> datos_doc = null;
     private static ObservableList<Appointment> datos_citas = null;
-    private static ArrayList<String> current_pacientes;
-    private static ArrayList<String> current_doctores;
+    public static ArrayList<String> current_pacientes;
+    public static ArrayList<String> current_doctores;
+    public static ObservableList<String> datos_current_paciente = null;
+    public static ObservableList<String> datos_current_doctor = null;
     private Doctor doctor_actual;
     private Patient paciente_actual;
     @FXML
@@ -104,7 +106,7 @@ public class FXMLDocumentController implements Initializable {
         //inicializa observable lists de ambos
         datos_pat = FXCollections.observableArrayList(pacientes);
         datos_doc = FXCollections.observableArrayList(doctores);
-        
+        //datos_current_paciente = FXCollections.observableArrayList(current_pacientes);
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
         
@@ -116,27 +118,31 @@ public class FXMLDocumentController implements Initializable {
         initPatients();
         initComboCita();
         initCurrent();
-        
+        datos_current_paciente = FXCollections.observableArrayList(current_pacientes);
+        datos_current_doctor = FXCollections.observableArrayList(current_doctores);
         text_clinic.setText(database.getClinicName());
         
         initStyle = btn_doctor.getStyle();
         
         combodoc = 0;
-        actual = 0;        
+        actual = 0;    
+        
     }  
     public void initComboCita(){
         field_buscar.textProperty().addListener((observable, oldValue, newValue) -> {
             if(combodoc == DOCTOR){
                 ArrayList<String> lista = filtrar(DOCTOR, newValue);
-            
-                combor_esultado.getItems().clear();
-                combor_esultado.getItems().addAll(lista);
+                datos_current_doctor.clear();
+                for(String s: lista){
+                    datos_current_doctor.add(s);
+                }
             }
             else if(combodoc == PATIENT){
                 ArrayList<String> lista = filtrar(PATIENT, newValue);
-            
-                combor_esultado.getItems().clear();
-                combor_esultado.getItems().addAll(lista);
+                datos_current_paciente.clear();
+                for(String s: lista){
+                    datos_current_paciente.add(s);
+                }
             }
             
         });
@@ -166,14 +172,12 @@ public class FXMLDocumentController implements Initializable {
         combo_doc_pat.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(combo_doc_pat.getSelectionModel().getSelectedItem().equals("Doctor")){
                 combodoc = DOCTOR;
-                combor_esultado.getItems().clear();
-                combor_esultado.getItems().addAll(current_doctores);
+                combor_esultado.setItems(datos_current_doctor);
                 
             }
             else if(combo_doc_pat.getSelectionModel().getSelectedItem().equals("Paciente")){
                 combodoc = PATIENT;
-                combor_esultado.getItems().clear();
-                combor_esultado.getItems().addAll(current_pacientes);
+                combor_esultado.setItems(datos_current_paciente);
                 
             }
         });
@@ -181,14 +185,13 @@ public class FXMLDocumentController implements Initializable {
         combo_doc_pat.getItems().add("Paciente");
     }
     
-    public void initCitas(){
-        
-    }
     //inicializa tabla pacientes
     private void initPatients(){        
         tabla_patient.setItems(datos_pat);
         col_nombre.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getName()));
         col_apellidos.setCellValueFactory(c -> new ReadOnlyObjectWrapper(c.getValue().getSurname()));
+        
+        
     }
     
     //inicializa tabla doctores
@@ -224,12 +227,9 @@ public class FXMLDocumentController implements Initializable {
         actual = 2;
     }
     public static void actualizarPacientes(Patient pat){
-        pacientes.add(pat);
-        current_pacientes.add(pat.getName() + " " + pat.getSurname());
+        
     }
     public static void actualizarDoctores(Doctor doc){
-        doctores.add(doc);
-        current_doctores.add(doc.getName() + " " + doc.getSurname());
     }
     private void setBackgroundButton(Button b) {
         String style = "-fx-background-color: gray;" + 
