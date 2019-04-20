@@ -100,7 +100,7 @@ public class AñadirCita2Controller implements Initializable {
         current_pacientes = new ArrayList<>();
         doctor_actual = null;        
             
-        
+        System.out.println("ea");
         
         
         //inits
