@@ -130,8 +130,8 @@ public class VentanaAñadirController implements Initializable {
                 aux.setTelephon(telephon);
                 aux.setIdentifier(identifier);
                 aux.setVisitDays(getDays());
-//                aux.setExaminationRoom(examination_rooms.get(
-//                                        combo_consulta.getSelectionModel().getSelectedItem().intValue()));
+                aux.setExaminationRoom(examination_rooms.get(
+                                        combo_consulta.getSelectionModel().getSelectedItem().intValue()));
                 LocalTime lt1 = LocalTime.of(combo_hora.getSelectionModel().getSelectedItem().intValue(),
                                             combo_min.getSelectionModel().getSelectedItem().intValue());
                 aux.setVisitStartTime(lt1);
@@ -143,6 +143,7 @@ public class VentanaAñadirController implements Initializable {
                 
                 db.getDoctors().add(aux);
                 doctor_local.add(aux);
+                FXMLDocumentController.actualizarDoctores(aux);
                 FXMLDocumentController.getClinicDBAccess().getDoctors().add(aux);
                 ((Stage) img.getScene().getWindow()).close();               
             }
@@ -150,6 +151,7 @@ public class VentanaAñadirController implements Initializable {
                 Patient aux = new Patient(identifier, name, surname, telephon, photo);
                 FXMLDocumentController.getClinicDBAccess().getPatients().add(aux);
                 pacientes_local.add(aux);
+                FXMLDocumentController.actualizarPacientes(aux);
                 ((Stage) img.getScene().getWindow()).close();
             }
         }
@@ -257,7 +259,7 @@ public class VentanaAñadirController implements Initializable {
                 (combo_hora1.getSelectionModel().getSelectedItem() != null) &&
                 (combo_min1.getSelectionModel().getSelectedItem() != null) &&
                 // cambiar a != quan ja no es fagen proves    
-                (combo_consulta.getSelectionModel().getSelectedItem() == null) && 
+                (combo_consulta.getSelectionModel().getSelectedItem() != null) && 
                 hayDiasSeleccionados();
         }
         return (field_nombre.getStyle() != redBackground) &&

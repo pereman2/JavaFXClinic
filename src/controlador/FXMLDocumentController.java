@@ -52,8 +52,8 @@ public class FXMLDocumentController implements Initializable {
     private static ObservableList<Patient> datos_pat = null;
     private static ObservableList<Doctor> datos_doc = null;
     private static ObservableList<Appointment> datos_citas = null;
-    private ArrayList<String> current_pacientes;
-    private ArrayList<String> current_doctores;
+    private static ArrayList<String> current_pacientes;
+    private static ArrayList<String> current_doctores;
     private Doctor doctor_actual;
     private Patient paciente_actual;
     @FXML
@@ -88,6 +88,7 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Appointment, String> col_fecha;
     @FXML
     private TableView<Appointment> table_cita;
+    @FXML
     private Button btn_citas;
     private String initStyle;
     @FXML
@@ -222,8 +223,15 @@ public class FXMLDocumentController implements Initializable {
         vbox_cita.setVisible(false);
         actual = 2;
     }
-    
-    public void setBackgroundButton(Button b) {
+    public static void actualizarPacientes(Patient pat){
+        pacientes.add(pat);
+        current_pacientes.add(pat.getName() + " " + pat.getSurname());
+    }
+    public static void actualizarDoctores(Doctor doc){
+        doctores.add(doc);
+        current_doctores.add(doc.getName() + " " + doc.getSurname());
+    }
+    private void setBackgroundButton(Button b) {
         String style = "-fx-background-color: gray;" + 
                         "-fx-border-radius: 24px;" + 
                         "-fx-border-color: gray;" + 

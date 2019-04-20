@@ -84,7 +84,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" onMouseClicked="#show_appointments" style="-fx-background-color: transparent;" styleClass="img">
+            <Button fx:id="btn_citas" mnemonicParsing="false" onMouseClicked="#show_appointments" style="-fx-background-color: transparent;" styleClass="img">
                <graphic>
                   <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                      <image>
