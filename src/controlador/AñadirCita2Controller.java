@@ -491,17 +491,28 @@ public class AñadirCita2Controller implements Initializable {
 
 
     }
+    private boolean esCorrecto(){
+        return combo_doctor != null &&
+               combo_paciente != null &&
+               combo_hora != null&&
+               combo_min != null && 
+               date_picker.getValue() != null;
+    }
     @FXML
     private void aceptar(MouseEvent event) {
-        int hora = combo_hora.getSelectionModel().getSelectedItem();
-        int min = combo_min.getSelectionModel().getSelectedItem();
-        LocalDate date = date_picker.getValue();
-        LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of(hora, min));
-        String str_pac = combo_paciente.getSelectionModel().getSelectedItem();
-        Patient pat = pacientes.get(current_pacientes.indexOf(str_pac));
-        Appointment aux = new Appointment(dateTime, doctor_actual, pat);
-        db.getAppointments().add(aux);       
-        cancelar(event);
+        if(esCorrecto()){
+            int hora = combo_hora.getSelectionModel().getSelectedItem();
+            int min = combo_min.getSelectionModel().getSelectedItem();
+            LocalDate date = date_picker.getValue();
+            LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of(hora, min));
+            String str_pac = combo_paciente.getSelectionModel().getSelectedItem();
+            Patient pat = pacientes.get(current_pacientes.indexOf(str_pac));
+            Appointment aux = new Appointment(dateTime, doctor_actual, pat);
+            db.getAppointments().add(aux);    
+            FXMLDocumentController.getClinicDBAccess().getAppointments().add(aux);
+            cancelar(event);
+        }
+        
     }
 
     @FXML

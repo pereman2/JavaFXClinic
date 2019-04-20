@@ -51,6 +51,9 @@
     -fx-border-width: 3px;
     -fx-background-radius: 24px; 
 }
+.xd{
+    -fx-background-image: "../images/fondo.jpg";
+}
 
 .comboBoxConsulta {
     -fx-border-radius: 50px;

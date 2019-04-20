@@ -125,9 +125,9 @@
       </VBox>
    </left>
    <top>
-      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" style="-fx-background-color: #00FFFF;" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="110.0" prefWidth="837.0" text="Clinic *insert*">
+            <Label fx:id="text_clinic" alignment="CENTER" prefHeight="110.0" prefWidth="837.0" text="Clinic *insert*">
                <font>
                   <Font name="SansSerif Bold" size="20.0" />
                </font>

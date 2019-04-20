@@ -88,6 +88,8 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Appointment, String> col_fecha;
     @FXML
     private TableView<Appointment> table_cita;
+    @FXML
+    private Label text_clinic;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -111,6 +113,8 @@ public class FXMLDocumentController implements Initializable {
         initPatients();
         initComboCita();
         initCurrent();
+        
+        text_clinic.setText(database.getClinicName());
         
         
         combodoc = 0;
@@ -251,6 +255,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void show_appointments(MouseEvent event) throws IOException{
+        setBackgroundButton((Button) event.getSource());
         tabla_patient.setVisible(false);
         tabla_doctor.setVisible(false);
         vbox_cita.setVisible(true);
