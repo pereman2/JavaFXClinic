@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,6 +29,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Skin;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -60,9 +62,7 @@ public class AñadirCita2Controller implements Initializable {
     @FXML
     private ComboBox<String> combo_paciente;
     @FXML
-    private ComboBox<String> combo_doctor;
-   
-    private DatePicker date_picker;
+    private ComboBox<String> combo_doctor;    
     @FXML
     private ComboBox<Integer> combo_hora;
     @FXML
@@ -86,6 +86,8 @@ public class AñadirCita2Controller implements Initializable {
     private Button btn_aceptar;
     @FXML
     private Button btn_cancelar;
+    @FXML
+    private DatePicker date2;
     /**
      * Initializes the controller class.
      */
@@ -97,10 +99,8 @@ public class AñadirCita2Controller implements Initializable {
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
         doctor_actual = null;        
-        date_picker = new DatePicker();         
-        date_picker.setShowWeekNumbers(true);
-        DatePickerSkin saux = new DatePickerSkin(date_picker);
-        hbox_picker.getChildren().add(saux.getPopupContent());    
+            
+        
         
         
         //inits
@@ -113,36 +113,26 @@ public class AñadirCita2Controller implements Initializable {
         ArrayList<Days> days = doctor_actual.getVisitDays();        
         ArrayList<Appointment> aux = db.getDoctorAppointments(
                                         doctor_actual.getIdentifier());
-
-
-
-        Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        // Must call super
-                        super.updateItem(item, empty);
-                        if (!item.isBefore(LocalDate.now())) {
-                            this.setDisable(false);
-                            for (Days d : days) {
-                                if (d.ordinal() + 1 == item.getDayOfWeek().getValue()) {                            
-                                    this.setStyle("-fx-background-color: green;");
-                                }
-                                else {
-                                    this.setStyle("-fx-background-color: red;");
-                                }
-                            }
-                        }
-                        else {
-                            this.setDisable(true);
-                        }                       
+        
+        Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    for (Days d : days) {
+                        System.out.println(d.toString());
+                        boolean comp = d.ordinal() + 1 == item.getDayOfWeek().getValue();
+                        if (comp) {
+                            this.setStyle("-fx-background-color: green;");                            
+                        }                   
                     }
-                };
-            }
-        };        
-        date_picker.setDayCellFactory(dayCellFactory);
-
+                    if (item.isBefore(LocalDate.now())){
+                        this.setStyle("-fx-background-color: gray;");
+                    }
+                }
+        };
+        
+        date2.setDayCellFactory(dayCellFactory);
+        
             
     }
     
@@ -191,7 +181,7 @@ public class AñadirCita2Controller implements Initializable {
             update();
             
         });
-        date_picker.promptTextProperty().addListener((observable, oldValue, newValue) -> {
+        date2.promptTextProperty().addListener((observable, oldValue, newValue) -> {
             update();
         });
         combo_min.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -207,7 +197,7 @@ public class AñadirCita2Controller implements Initializable {
         
         if(combo_min.getSelectionModel().getSelectedItem() != null &&
                     combo_hora.getSelectionModel().getSelectedItem() != null &&
-                    date_picker.getValue() != null &&
+                    date2.getValue() != null &&
                     combo_doctor.getSelectionModel().getSelectedItem() != null){
                     SlotWeek aux = slotMatch();
                     LocalTime time1 = doctor_actual.getVisitStartTime();
@@ -229,7 +219,7 @@ public class AñadirCita2Controller implements Initializable {
             ArrayList<Days> visitDays = doctor_actual.getVisitDays();
             LocalTime visitStartTime = doctor_actual.getVisitStartTime();
             LocalTime visitEndTime = doctor_actual.getVisitEndTime();
-            LocalDate date = date_picker.getValue();
+            LocalDate date = date2.getValue();
             int semana = getDiaSemana(date);
             ArrayList<Appointment> appointments = db.getDoctorAppointments(doctor_actual.getIdentifier());
             semana_doctor = SlotAppointmentsWeek.getAppointmentsWeek(semana, visitDays, visitStartTime, visitEndTime, appointments);
@@ -246,7 +236,7 @@ public class AñadirCita2Controller implements Initializable {
         return res;
     }
     private String checkDisponible(SlotWeek slot){
-        int dia = date_picker.getValue().getDayOfWeek().getValue();
+        int dia = date2.getValue().getDayOfWeek().getValue();
         String str_dia = "";
         switch(dia){
             case 1:
@@ -396,7 +386,7 @@ public class AñadirCita2Controller implements Initializable {
     private void aceptar(MouseEvent event) {
         int hora = combo_hora.getSelectionModel().getSelectedItem();
         int min = combo_min.getSelectionModel().getSelectedItem();
-        LocalDate date = date_picker.getValue();
+        LocalDate date = date2.getValue();
         LocalDateTime dateTime = LocalDateTime.of(date, LocalTime.of(hora, min));
         String str_pac = combo_paciente.getSelectionModel().getSelectedItem();
         Patient pat = pacientes.get(current_pacientes.indexOf(str_pac));
@@ -409,5 +399,10 @@ public class AñadirCita2Controller implements Initializable {
     private void cancelar(MouseEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void eatobe(MouseEvent event) {        
+        dispDataPicker();
     }
 }
