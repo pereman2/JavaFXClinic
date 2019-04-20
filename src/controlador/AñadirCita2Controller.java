@@ -412,9 +412,9 @@ public class AñadirCita2Controller implements Initializable {
         combo_min.getItems().add(ap.getAppointmentDateTime().getMinute());
         combo_min.getSelectionModel().select(0);
         
-        date_picker.setValue(ap.getAppointmentDateTime().toLocalDate());
+        date2.setValue(ap.getAppointmentDateTime().toLocalDate());
         
-        date_picker.setDisable(true);
+        date2.setDisable(true);
         combo_hora.setEditable(false);
         combo_min.setEditable(false);
         combo_paciente.setEditable(false);
