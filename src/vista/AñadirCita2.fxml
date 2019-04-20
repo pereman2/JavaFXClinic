@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="520.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.AñadirCita2Controller">
+<AnchorPane prefHeight="250.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.AñadirCita2Controller">
    <children>
       <TextField fx:id="field_paciente" layoutX="42.0" layoutY="41.0" onInputMethodTextChanged="#text_change" prefHeight="32.0" prefWidth="248.0" promptText="Nombre Paciente" styleClass="textfields" stylesheets="@estilo.css" />
       <ComboBox fx:id="combo_paciente" layoutX="307.0" layoutY="41.0" prefHeight="32.0" prefWidth="259.0" promptText="combo paciente" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
       <TextField fx:id="field_doctor" layoutX="43.0" layoutY="84.0" onInputMethodTextChanged="#text_change" prefHeight="32.0" prefWidth="248.0" promptText="Nombre Doctor" styleClass="textfields" stylesheets="@estilo.css" />
       <ComboBox fx:id="combo_doctor" layoutX="307.0" layoutY="84.0" prefHeight="32.0" prefWidth="259.0" promptText="combo doctor" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
-      <ComboBox fx:id="combo_hora" layoutX="139.0" layoutY="148.0" prefWidth="150.0" promptText="hora" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
-      <ComboBox fx:id="combo_min" layoutX="304.0" layoutY="148.0" prefWidth="150.0" promptText="minutos" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
+      <ComboBox fx:id="combo_hora" layoutX="43.0" layoutY="148.0" prefWidth="150.0" promptText="hora" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
+      <ComboBox fx:id="combo_min" layoutX="201.0" layoutY="148.0" prefWidth="150.0" promptText="minutos" styleClass="comboBoxConsulta" stylesheets="@estilo.css" />
       <Label layoutX="43.0" layoutY="20.0" text="Datos" />
       <Label layoutX="43.0" layoutY="132.0" text="Cita" />
-      <HBox fx:id="hbox_picker" alignment="BASELINE_CENTER" layoutX="35.0" layoutY="199.0" prefHeight="257.0" prefWidth="526.0" />
-      <Button fx:id="btn_aceptar" layoutX="426.0" layoutY="474.0" mnemonicParsing="false" onMouseClicked="#aceptar" styleClass="btnAceptar" stylesheets="@estilo.css" text="Aceptar" />
-      <Button fx:id="btn_cancelar" layoutX="508.0" layoutY="474.0" mnemonicParsing="false" onMouseClicked="#cancelar" styleClass="btnCancelar" stylesheets="@estilo.css" text="Cancelar" />
-      <DatePicker fx:id="date2" layoutX="18.0" layoutY="475.0" onMouseClicked="#eatobe" />
+      <HBox fx:id="hbox_picker" alignment="BASELINE_CENTER" layoutX="43.0" layoutY="200.0" prefHeight="16.0" prefWidth="335.0" />
+      <Button fx:id="btn_aceptar" layoutX="402.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#aceptar" styleClass="btnAceptar" stylesheets="@estilo.css" text="Aceptar" />
+      <Button fx:id="btn_cancelar" layoutX="484.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#cancelar" styleClass="btnCancelar" stylesheets="@estilo.css" text="Cancelar" />
+      <DatePicker fx:id="date2" layoutX="368.0" layoutY="151.0" onMouseClicked="#eatobe" />
    </children>
 </AnchorPane>

@@ -109,9 +109,8 @@ public class AñadirCita2Controller implements Initializable {
         doctores = db.getDoctors();
         current_doctores = new ArrayList<>();
         current_pacientes = new ArrayList<>();
-        doctor_actual = null;        
-            
-        System.out.println("ea");
+        doctor_actual = null; 
+        
         
         
         //inits
@@ -131,6 +130,7 @@ public class AñadirCita2Controller implements Initializable {
                     for (Days d : days) {
                         System.out.println(d.toString());
                         boolean comp = d.ordinal() + 1 == item.getDayOfWeek().getValue();
+                        
                         if (comp) {
                             this.setStyle("-fx-background-color: green;");                            
                         }                   
@@ -139,11 +139,8 @@ public class AñadirCita2Controller implements Initializable {
                         this.setStyle("-fx-background-color: gray;");
                     }
                 }
-        };
-        
-        date2.setDayCellFactory(dayCellFactory);
-        
-            
+        };       
+        date2.setDayCellFactory(dayCellFactory);        
     }
     
     
