@@ -2,4 +2,4 @@
 
 College project
 
-won't work without a xml database
+Xml file must be on /home/user directory in order to work
